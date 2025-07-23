@@ -49,59 +49,44 @@ This is a modern office intranet application built with React, Next.js, shadcn/u
 - Desktop: 1024px - 1440px (multi-column, persistent sidebar)
 - Large: 1440px+ (ultra-wide, multiple panels)
 
-## 🏗 Core Features (Tier 1)
+## 🏗 Application Structure
 
-### 1. Smart Dashboard with Widgets
-- 12-column responsive grid (24px gutters)
-- Glass-morphic widget cards with gradient borders
-- Drag & drop functionality with snap-to-grid
-- Widget types:
-  - Welcome Widget (8x4) - Personalized greeting with dynamic backgrounds
-  - Quick Actions (4x4) - Hexagonal button grid
-  - My Tasks (6x4) - Kanban-style mini board
-  - Team Pulse (4x3) - Team status and activity
-  - Analytics (6x3) - Real-time animated charts
+### Main Layout Components
+- **Header**: Company logo, global search, notifications, user profile, theme toggle
+- **Main Dashboard**: 12-column responsive grid with drag-and-drop widgets
+- **Right Sidebar**: Collapsible panel for notifications and quick updates
+- **Floating Action Button**: Quick access to common actions
 
-### 2. Company News Feed
-- Central column (max-width 800px)
-- Post types: Announcements, Achievements, Events, Media
-- Smart sorting algorithm with ML personalization
-- Infinite scroll with pull-to-refresh
-- Rich interactions: reactions, comments, sharing
+### Core Dashboard Widgets
+1. **Welcome Widget** - Personalized greeting, date/time, weather, schedule summary
+2. **Quick Actions** - Grid of action buttons for common tasks
+3. **Company News Feed** - Post cards with like/comment features and category filters
+4. **My Tasks** - Kanban board (To Do, In Progress, Done) with drag functionality
+5. **Team Members** - Avatar grid with online status indicators
+6. **Analytics** - Toggle between different chart types (revenue, productivity, projects)
+7. **Calendar** - Month view with event indicators and today's events list
+8. **Recognition Wall** - Recent achievements and kudos with recognition features
 
-### 3. Employee Directory & Profiles
-- Advanced search with fuzzy matching and voice input
-- 3D flip cards with hover animations
-- Interactive org chart with zoom/pan
-- Comprehensive profile pages with tabs
-- Skills visualization and availability indicators
+### Modal/Overlay Features
+- **Employee Directory** - Search/filter employees with profile cards and org chart
+- **Resource Booking** - Meeting rooms and equipment with calendar integration
+- **Knowledge Base** - Categories, article search, and FAQ sections
+- **Command Palette** - Universal search with quick actions (Cmd+K)
 
-### 4. Events Calendar
-- Multiple views: Month, Week, Day, Agenda
-- Smart event creation with natural language input
-- Room finder integration
-- RSVP system with conflict detection
-- Category color coding
+## 🚀 Additional Sections
 
-### 5. Quick Access Toolbar
-- Floating glass-morphic toolbar (bottom-right)
-- Expandable with magnetic dock behavior
-- Customizable quick actions
-- Circular buttons with pulse notifications
+### Team Collaboration
+- **Team Spaces** - Department landing pages with shared resources
+- **Project Tracking** - Project lists with Gantt views and assignments
 
-## 🚀 High-Impact Features (Tier 2)
-- Team Collaboration Spaces
-- Knowledge Base/Wiki
-- Employee Recognition Wall
-- Task & Project Tracking
-- Resource Booking System
+### Employee Experience
+- **Wellness Hub** - Challenges dashboard and mental health resources
+- **Employee Recognition** - Achievement tracking and peer recognition
 
-## ✨ Differentiator Features (Tier 3)
-- AI-Powered Search
-- Interactive Data Dashboards
-- Wellness & Culture Hub
-- Smart Notifications
-- Mobile-First PWA
+### Advanced Features
+- **AI-Powered Search** - Intelligent content discovery
+- **Real-time Notifications** - Smart notification system
+- **Mobile-First PWA** - Progressive web app capabilities
 
 ## 📦 Component Architecture
 
@@ -153,6 +138,16 @@ src/
 
 ## 🎯 Key Implementation Notes
 
+### Core Features to Implement
+- Drag-and-drop widget system with grid snapping
+- Local storage for user preferences and widget layouts
+- Real-time search across all content
+- Modal system for overlay features
+- Toast notifications for user feedback
+- Loading states and error handling
+- Fully responsive design across all breakpoints
+
+### Technical Implementation
 1. **Widget System**: Implement drag-and-drop with react-beautiful-dnd or @dnd-kit
 2. **Animations**: Use framer-motion for spring animations and micro-interactions
 3. **Charts**: Integrate recharts or chart.js for analytics widgets
@@ -161,6 +156,13 @@ src/
 6. **Forms**: Use react-hook-form with zod validation
 7. **Icons**: Lucide React for consistent iconography
 8. **Data Fetching**: TanStack Query for server state management
+
+### Build Priority Order
+1. **Foundation** - Header, dashboard grid, widget containers
+2. **Core Widgets** - Welcome, quick actions, news feed, calendar
+3. **Interactive Features** - Task board, team members, analytics, recognition
+4. **Advanced Features** - Employee directory, command palette, booking system
+5. **Polish** - Animations, dark mode, mobile optimization
 
 ## 📋 Development Commands
 - `npm run dev` - Start development server
