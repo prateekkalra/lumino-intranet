@@ -31,6 +31,7 @@ import {
   CollapsibleTrigger 
 } from "@/components/ui/collapsible"
 import { useSidebar } from "@/contexts/SidebarContext"
+import { useDialog } from "@/contexts/DialogContext"
 
 interface SystemNotification {
   id: string
@@ -302,6 +303,7 @@ function SidebarSection({ title, icon: Icon, children, defaultOpen = true, badge
 
 export function RightSidebar() {
   const { isOpen, close } = useSidebar()
+  const { openDialog } = useDialog()
 
   const getNotificationIcon = (type: SystemNotification['type']) => {
     switch (type) {
@@ -465,7 +467,12 @@ export function RightSidebar() {
                       </div>
                     )
                   })}
-                  <Button variant="outline" size="sm" className="w-full mt-3 hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full mt-3 hover:bg-primary hover:text-primary-foreground transition-colors"
+                    onClick={() => openDialog('alerts')}
+                  >
                     <Bell className="h-3 w-3 mr-2" />
                     View All Alerts
                   </Button>
@@ -518,7 +525,12 @@ export function RightSidebar() {
                       </div>
                     </div>
                   ))}
-                  <Button variant="outline" size="sm" className="w-full mt-3 hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full mt-3 hover:bg-primary hover:text-primary-foreground transition-colors"
+                    onClick={() => openDialog('calendar')}
+                  >
                     <Calendar className="h-3 w-3 mr-2" />
                     Open Calendar
                   </Button>
@@ -532,9 +544,36 @@ export function RightSidebar() {
                 <div className="grid grid-cols-2 gap-2">
                   {mockQuickLinks.map((link) => {
                     const Icon = link.icon
+                    const handleClick = () => {
+                      switch (link.title) {
+                        case 'Employee Portal':
+                          openDialog('employee-portal')
+                          break
+                        case 'IT Service Desk':
+                          openDialog('service-desk')
+                          break
+                        case 'Project Management':
+                          openDialog('project-management')
+                          break
+                        case 'Knowledge Base':
+                          openDialog('knowledge-base')
+                          break
+                        case 'Time Tracking':
+                          openDialog('time-tracking')
+                          break
+                        case 'Company Directory':
+                          openDialog('directory')
+                          break
+                        default:
+                          // For other links, you can add more dialogs or external navigation
+                          console.log(`Opening ${link.title}`)
+                      }
+                    }
+                    
                     return (
                       <button
                         key={link.id}
+                        onClick={handleClick}
                         className={`group p-3 rounded-xl border text-left transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 ${getLinkColor(link.color)}`}
                       >
                         <div className="space-y-2">
@@ -611,7 +650,12 @@ export function RightSidebar() {
                       </div>
                     </div>
                   ))}
-                  <Button variant="outline" size="sm" className="w-full mt-3 hover:bg-primary hover:text-primary-foreground transition-colors">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="w-full mt-3 hover:bg-primary hover:text-primary-foreground transition-colors"
+                    onClick={() => openDialog('team-feed')}
+                  >
                     <MessageCircle className="h-3 w-3 mr-2" />
                     View Team Feed
                   </Button>
