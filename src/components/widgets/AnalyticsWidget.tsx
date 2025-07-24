@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { Button } from '../ui/button';
-import { TrendingUp, TrendingDown, Minus, BarChart3 } from 'lucide-react';
+import { useToast } from '../ui/use-toast';
+import { useDialog } from '../../contexts/DialogContext';
+import { TrendingUp, TrendingDown, Minus, BarChart3, Download, Calendar, Maximize2 } from 'lucide-react';
 
 const mockData = {
   revenue: [
@@ -61,6 +63,8 @@ const chartConfig = {
 
 export const AnalyticsWidget = () => {
   const [activeChart, setActiveChart] = useState<ChartType>('revenue');
+  const { toast } = useToast();
+  const { openDialog } = useDialog();
 
   const config = chartConfig[activeChart];
   const data = mockData[activeChart];
@@ -76,23 +80,96 @@ export const AnalyticsWidget = () => {
     }
   };
 
+  const handleChartClick = (data: any) => {
+    if (data && data.activePayload) {
+      const point = data.activePayload[0];
+      toast({
+        title: "Data point details",
+        description: `${point.payload.month}: ${config.unit}${point.value}`,
+      });
+    }
+  };
+
+  const handleExport = () => {
+    toast({
+      title: "Exporting data",
+      description: `Downloading ${config.title} data as CSV`,
+    });
+    // Simulate export
+    setTimeout(() => {
+      toast({
+        title: "Export complete",
+        description: "File downloaded successfully",
+      });
+    }, 1500);
+  };
+
+  const handleDateRange = () => {
+    openDialog('calendar');
+    toast({
+      title: "Date range selector",
+      description: "Choose custom date range for analytics",
+    });
+  };
+
+  const handleFullView = () => {
+    openDialog('project-management');
+    toast({
+      title: "Full analytics view",
+      description: "Opening detailed analytics dashboard",
+    });
+  };
+
   return (
     <div className="h-full flex flex-col">
-      {/* Chart Type Selector */}
-      <div className="flex items-center gap-1 mb-4">
-        <BarChart3 className="h-4 w-4 text-gray-500" />
+      {/* Header with Controls */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-1">
+          <BarChart3 className="h-4 w-4 text-gray-500" />
+          <div className="flex gap-1">
+            {(Object.keys(chartConfig) as ChartType[]).map((type) => (
+              <Button
+                key={type}
+                size="sm"
+                variant={activeChart === type ? 'default' : 'outline'}
+                onClick={() => setActiveChart(type)}
+                className="h-6 px-2 text-xs capitalize"
+              >
+                {type}
+              </Button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Action Buttons */}
         <div className="flex gap-1">
-          {(Object.keys(chartConfig) as ChartType[]).map((type) => (
-            <Button
-              key={type}
-              size="sm"
-              variant={activeChart === type ? 'default' : 'outline'}
-              onClick={() => setActiveChart(type)}
-              className="h-6 px-2 text-xs capitalize"
-            >
-              {type}
-            </Button>
-          ))}
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleDateRange}
+            className="h-6 w-6 p-0"
+            title="Date range"
+          >
+            <Calendar className="h-3 w-3" />
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleExport}
+            className="h-6 w-6 p-0"
+            title="Export data"
+          >
+            <Download className="h-3 w-3" />
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={handleFullView}
+            className="h-6 w-6 p-0"
+            title="Full view"
+          >
+            <Maximize2 className="h-3 w-3" />
+          </Button>
         </div>
       </div>
 
@@ -124,11 +201,12 @@ export const AnalyticsWidget = () => {
 
       {/* Chart */}
       <div className="flex-1 min-h-0 w-full">
-        <div className="h-full w-full min-h-[120px]">
+        <div className="h-full w-full min-h-[120px] cursor-pointer">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart 
               data={data}
               margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+              onClick={handleChartClick}
             >
               <XAxis 
                 dataKey="month" 
@@ -151,6 +229,7 @@ export const AnalyticsWidget = () => {
                   border: '1px solid #E5E7EB',
                   borderRadius: '8px',
                   fontSize: '12px',
+                  cursor: 'pointer',
                 }}
                 formatter={(value) => [`${config.unit}${value}`, config.title]}
               />
@@ -159,8 +238,18 @@ export const AnalyticsWidget = () => {
                 dataKey="value"
                 stroke={config.color}
                 strokeWidth={2}
-                dot={{ fill: config.color, strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, stroke: config.color, strokeWidth: 2 }}
+                dot={{ 
+                  fill: config.color, 
+                  strokeWidth: 2, 
+                  r: 4,
+                  className: "hover:r-6 cursor-pointer transition-all duration-200"
+                }}
+                activeDot={{ 
+                  r: 8, 
+                  stroke: config.color, 
+                  strokeWidth: 2,
+                  className: "cursor-pointer animate-pulse"
+                }}
               />
             </LineChart>
           </ResponsiveContainer>

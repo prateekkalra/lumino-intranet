@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from '../ui/button';
 import { EnhancedScrollArea } from '../ui/scroll-area';
+import { useDialog } from '../../contexts/DialogContext';
+import { useToast } from '../ui/use-toast';
 import {
   Calendar,
   DollarSign,
@@ -15,64 +17,56 @@ import {
   Coffee,
   Car,
 } from 'lucide-react';
-import type { QuickAction } from '../../types/dashboard';
+// import type { QuickAction } from '../../types/dashboard';
 
-const quickActions: QuickAction[] = [
+const quickActions = [
   {
     id: 'book-room',
     label: 'Book Room',
     icon: 'Calendar',
     color: 'bg-blue-500 hover:bg-blue-600 text-white',
-    onClick: () => console.log('Book room clicked'),
   },
   {
     id: 'submit-expense',
     label: 'Submit Expense',
     icon: 'DollarSign',
     color: 'bg-green-500 hover:bg-green-600 text-white',
-    onClick: () => console.log('Submit expense clicked'),
   },
   {
     id: 'start-call',
     label: 'Start Call',
     icon: 'Phone',
     color: 'bg-purple-500 hover:bg-purple-600 text-white',
-    onClick: () => console.log('Start call clicked'),
   },
   {
     id: 'create-report',
     label: 'Create Report',
     icon: 'FileText',
     color: 'bg-orange-500 hover:bg-orange-600 text-white',
-    onClick: () => console.log('Create report clicked'),
   },
   {
     id: 'find-colleague',
     label: 'Find Colleague',
     icon: 'Users',
     color: 'bg-indigo-500 hover:bg-indigo-600 text-white',
-    onClick: () => console.log('Find colleague clicked'),
   },
   {
     id: 'send-message',
     label: 'Send Message',
     icon: 'MessageSquare',
     color: 'bg-pink-500 hover:bg-pink-600 text-white',
-    onClick: () => console.log('Send message clicked'),
   },
   {
     id: 'log-time',
     label: 'Log Time',
     icon: 'Clock',
     color: 'bg-teal-500 hover:bg-teal-600 text-white',
-    onClick: () => console.log('Log time clicked'),
   },
   {
     id: 'it-support',
     label: 'IT Support',
     icon: 'Settings',
     color: 'bg-gray-500 hover:bg-gray-600 text-white',
-    onClick: () => console.log('IT support clicked'),
   },
 ];
 
@@ -110,6 +104,82 @@ const getIcon = (iconName: string) => {
 };
 
 export const QuickActionsWidget: React.FC = () => {
+  const { openDialog } = useDialog();
+  const { toast } = useToast();
+
+  const handleAction = (actionId: string) => {
+    switch (actionId) {
+      case 'book-room':
+        openDialog('calendar');
+        toast({
+          title: "Calendar opened",
+          description: "You can now book rooms and schedule meetings",
+        });
+        break;
+      case 'submit-expense':
+        openDialog('time-tracking');
+        toast({
+          title: "Time tracking opened",
+          description: "Access expense tracking in the expenses tab",
+        });
+        break;
+      case 'start-call':
+        // Simulate starting a call
+        toast({
+          title: "Starting call...",
+          description: "Connecting you to the video call system",
+        });
+        // TODO: Implement actual call functionality
+        break;
+      case 'create-report':
+        openDialog('project-management');
+        toast({
+          title: "Project management opened",
+          description: "Access reports and project analytics",
+        });
+        break;
+      case 'find-colleague':
+        openDialog('directory');
+        toast({
+          title: "Employee directory opened",
+          description: "Search and connect with colleagues",
+        });
+        break;
+      case 'send-message':
+        openDialog('team-feed');
+        toast({
+          title: "Team feed opened",
+          description: "Share updates and communicate with your team",
+        });
+        break;
+      case 'log-time':
+        openDialog('time-tracking');
+        toast({
+          title: "Time tracking opened",
+          description: "Log your work hours and track productivity",
+        });
+        break;
+      case 'it-support':
+        openDialog('service-desk');
+        toast({
+          title: "Service desk opened",
+          description: "Submit IT tickets and get support",
+        });
+        break;
+      default:
+        toast({
+          title: "Feature coming soon",
+          description: "This functionality will be available soon",
+        });
+    }
+  };
+
+  // Update the actions with proper onClick handlers
+  const actionsWithHandlers = quickActions.map(action => ({
+    ...action,
+    onClick: () => handleAction(action.id)
+  }));
+
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -122,11 +192,11 @@ export const QuickActionsWidget: React.FC = () => {
       {/* Actions Grid with ScrollArea */}
       <EnhancedScrollArea className="flex-1 pr-2">
         <div className="grid grid-cols-2 gap-3">
-          {quickActions.map((action) => (
+          {actionsWithHandlers.map((action) => (
             <Button
               key={action.id}
               onClick={action.onClick}
-              className={`${action.color} h-16 px-3 flex flex-col items-center justify-center gap-2 hover:brightness-110 transition-all duration-200 shadow-sm hover:shadow-md rounded-lg`}
+              className={`${action.color} h-16 px-3 flex flex-col items-center justify-center gap-2 hover:brightness-110 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md rounded-lg active:scale-95`}
               variant="default"
             >
               {getIcon(action.icon)}

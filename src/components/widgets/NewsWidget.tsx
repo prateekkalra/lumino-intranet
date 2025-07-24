@@ -3,12 +3,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { EnhancedScrollArea } from '../ui/scroll-area';
+import { useToast } from '../ui/use-toast';
+import { useDialog } from '../../contexts/DialogContext';
 import {
   Heart,
   MessageCircle,
   Share2,
   Filter,
   User,
+  Plus,
 } from 'lucide-react';
 import type { NewsPost } from '../../types/data';
 
@@ -97,6 +100,13 @@ const getTimeAgo = (date: Date): string => {
 export const NewsWidget: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set(['2']));
+  const [commentCounts, setCommentCounts] = useState<Record<string, number>>({
+    '1': 1,
+    '2': 0,
+    '3': 0,
+  });
+  const { toast } = useToast();
+  const { openDialog } = useDialog();
 
   const categories = ['announcement', 'update', 'event', 'achievement'];
 
@@ -108,49 +118,106 @@ export const NewsWidget: React.FC = () => {
   const handleLike = (postId: string) => {
     setLikedPosts((prev) => {
       const newLiked = new Set(prev);
+      const isLiking = !newLiked.has(postId);
+      
       if (newLiked.has(postId)) {
         newLiked.delete(postId);
       } else {
         newLiked.add(postId);
       }
+      
+      toast({
+        title: isLiking ? "Post liked!" : "Like removed",
+        description: isLiking ? "You liked this post" : "You unliked this post",
+      });
+      
       return newLiked;
     });
   };
 
   const handleComment = (postId: string) => {
-    console.log('Comment on post:', postId);
+    setCommentCounts(prev => ({
+      ...prev,
+      [postId]: (prev[postId] || 0) + 1
+    }));
+    
+    toast({
+      title: "Comment added",
+      description: "Your comment has been posted successfully",
+    });
   };
 
   const handleShare = (postId: string) => {
-    console.log('Share post:', postId);
+    const post = mockNewsData.find(p => p.id === postId);
+    
+    // Simulate sharing to clipboard
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(`Check out this post: "${post?.title}"`);
+      toast({
+        title: "Post shared",
+        description: "Link copied to clipboard",
+      });
+    } else {
+      toast({
+        title: "Post shared",
+        description: "Sharing functionality activated",
+      });
+    }
+  };
+
+  const handleAuthorClick = (authorName: string) => {
+    openDialog('directory');
+    toast({
+      title: "Profile opened",
+      description: `Viewing ${authorName}'s profile in directory`,
+    });
+  };
+
+  const handleCreatePost = () => {
+    openDialog('team-feed');
+    toast({
+      title: "Team feed opened",
+      description: "Create a new post for your team",
+    });
   };
 
   return (
     <div className="h-full flex flex-col">
-      {/* Filter Header */}
-      <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-        <Filter className="h-4 w-4 text-gray-500" />
-        <div className="flex gap-1 flex-wrap">
-          <Button
-            size="sm"
-            variant={selectedCategory === null ? 'default' : 'outline'}
-            onClick={() => setSelectedCategory(null)}
-            className="h-6 px-2 text-xs"
-          >
-            All
-          </Button>
-          {categories.map((category) => (
+      {/* Header with Filter and Create Post */}
+      <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-gray-500" />
+          <div className="flex gap-1 flex-wrap">
             <Button
-              key={category}
               size="sm"
-              variant={selectedCategory === category ? 'default' : 'outline'}
-              onClick={() => setSelectedCategory(category)}
-              className="h-6 px-2 text-xs capitalize"
+              variant={selectedCategory === null ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory(null)}
+              className="h-6 px-2 text-xs"
             >
-              {category}
+              All
             </Button>
-          ))}
+            {categories.map((category) => (
+              <Button
+                key={category}
+                size="sm"
+                variant={selectedCategory === category ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory(category)}
+                className="h-6 px-2 text-xs capitalize"
+              >
+                {category}
+              </Button>
+            ))}
+          </div>
         </div>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleCreatePost}
+          className="h-6 px-2 text-xs"
+        >
+          <Plus className="h-3 w-3 mr-1" />
+          Post
+        </Button>
       </div>
 
       {/* News Feed */}
@@ -164,16 +231,24 @@ export const NewsWidget: React.FC = () => {
               {/* Post Header */}
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={post.author.avatar} alt={post.author.name} />
-                    <AvatarFallback>
-                      <User className="h-4 w-4" />
-                    </AvatarFallback>
-                  </Avatar>
+                  <button
+                    onClick={() => handleAuthorClick(post.author.name)}
+                    className="hover:opacity-80 transition-opacity"
+                  >
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={post.author.avatar} alt={post.author.name} />
+                      <AvatarFallback>
+                        <User className="h-4 w-4" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </button>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    <button
+                      onClick={() => handleAuthorClick(post.author.name)}
+                      className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-left"
+                    >
                       {post.author.name}
-                    </p>
+                    </button>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       {post.author.role} • {getTimeAgo(post.publishedAt)}
                     </p>
@@ -212,15 +287,15 @@ export const NewsWidget: React.FC = () => {
                     size="sm"
                     variant="ghost"
                     onClick={() => handleLike(post.id)}
-                    className={`h-7 px-2 gap-1 ${
+                    className={`h-7 px-2 gap-1 transition-all duration-200 hover:scale-105 ${
                       likedPosts.has(post.id)
                         ? 'text-red-500 hover:text-red-600'
-                        : 'text-gray-500 hover:text-gray-700'
+                        : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                     }`}
                   >
                     <Heart
-                      className={`h-3 w-3 ${
-                        likedPosts.has(post.id) ? 'fill-current' : ''
+                      className={`h-3 w-3 transition-all duration-200 ${
+                        likedPosts.has(post.id) ? 'fill-current scale-110' : ''
                       }`}
                     />
                     <span className="text-xs">
@@ -231,16 +306,18 @@ export const NewsWidget: React.FC = () => {
                     size="sm"
                     variant="ghost"
                     onClick={() => handleComment(post.id)}
-                    className="h-7 px-2 gap-1 text-gray-500 hover:text-gray-700"
+                    className="h-7 px-2 gap-1 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-105"
                   >
                     <MessageCircle className="h-3 w-3" />
-                    <span className="text-xs">{post.comments.length}</span>
+                    <span className="text-xs">
+                      {(commentCounts[post.id] || post.comments.length)}
+                    </span>
                   </Button>
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => handleShare(post.id)}
-                    className="h-7 px-2 gap-1 text-gray-500 hover:text-gray-700"
+                    className="h-7 px-2 gap-1 text-gray-500 hover:text-green-600 dark:hover:text-green-400 transition-all duration-200 hover:scale-105"
                   >
                     <Share2 className="h-3 w-3" />
                     <span className="text-xs">Share</span>
