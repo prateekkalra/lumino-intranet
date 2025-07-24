@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
-import { ScrollArea } from '../ui/scroll-area';
+import { EnhancedScrollArea } from '../ui/scroll-area';
 import { Heart, Trophy, Star, Zap } from 'lucide-react';
 
 const mockRecognitions = [
@@ -105,7 +105,7 @@ const getTimeAgo = (date: Date): string => {
 export const RecognitionWidget = () => {
   return (
     <div className="h-full flex flex-col">
-      <ScrollArea className="flex-1 pr-2">
+      <EnhancedScrollArea className="flex-1 pr-2">
         <div className="space-y-4">
           {mockRecognitions.map((recognition) => (
             <div
@@ -175,7 +175,7 @@ export const RecognitionWidget = () => {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </EnhancedScrollArea>
 
       {/* Footer */}
       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">

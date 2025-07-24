@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { ScrollArea } from '../ui/scroll-area';
+import { EnhancedScrollArea } from '../ui/scroll-area';
 import {
   Heart,
   MessageCircle,
@@ -154,7 +154,7 @@ export const NewsWidget: React.FC = () => {
       </div>
 
       {/* News Feed */}
-      <ScrollArea className="flex-1 pr-2">
+      <EnhancedScrollArea className="flex-1 pr-2">
         <div className="space-y-4">
           {filteredNews.map((post) => (
             <div
@@ -250,7 +250,7 @@ export const NewsWidget: React.FC = () => {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </EnhancedScrollArea>
 
       {/* Footer */}
       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">

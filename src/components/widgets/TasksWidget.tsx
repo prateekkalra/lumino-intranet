@@ -1,5 +1,5 @@
 import { Badge } from '../ui/badge';
-import { ScrollArea } from '../ui/scroll-area';
+import { EnhancedScrollArea } from '../ui/scroll-area';
 import { Circle, Clock, CheckCircle2 } from 'lucide-react';
 
 const mockTasks = [
@@ -38,7 +38,7 @@ const getPriorityColor = (priority: string) => {
 export const TasksWidget = () => {
   return (
     <div className="h-full flex flex-col">
-      <ScrollArea className="flex-1 pr-2">
+      <EnhancedScrollArea className="flex-1 pr-2">
         <div className="space-y-3">
           {mockTasks.map((task) => (
             <div key={task.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700">
@@ -59,7 +59,7 @@ export const TasksWidget = () => {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </EnhancedScrollArea>
     </div>
   );
 };

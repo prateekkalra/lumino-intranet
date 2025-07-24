@@ -58,3 +58,91 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }
+
+@layer components {
+  /* Enhanced scrollbar styles for webkit browsers */
+  .scroll-area-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scroll-area-content::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 8px;
+  }
+
+  .scroll-area-content::-webkit-scrollbar-thumb {
+    background: hsl(var(--border) / 0.6);
+    border-radius: 8px;
+    transition: all 0.2s ease-out;
+  }
+
+  .scroll-area-content::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--border));
+  }
+
+  .scroll-area-content::-webkit-scrollbar-thumb:active {
+    background: hsl(var(--border));
+  }
+
+  .dark .scroll-area-content::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.6);
+  }
+
+  .dark .scroll-area-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(107, 114, 128, 1);
+  }
+
+  .dark .scroll-area-content::-webkit-scrollbar-thumb:active {
+    background: rgba(75, 85, 99, 1);
+  }
+
+  /* Smooth scrolling for all scroll containers */
+  .scroll-smooth-enhanced {
+    scroll-behavior: smooth;
+    scroll-padding-top: 1rem;
+  }
+
+  /* Widget container enhancements */
+  .widget-scroll-container {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border) / 0.6) transparent;
+  }
+
+  .dark .widget-scroll-container {
+    scrollbar-color: rgba(156, 163, 175, 0.6) transparent;
+  }
+
+  /* Responsive scrolling enhancements */
+  @media (max-width: 768px) {
+    .scroll-area-content::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    .widget-scroll-container {
+      scrollbar-width: thin;
+    }
+  }
+
+  /* Enhanced touch scrolling for mobile */
+  @media (hover: none) and (pointer: coarse) {
+    .scroll-smooth-enhanced {
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+  }
+
+  /* Focus and accessibility improvements */
+  .scroll-area-content:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Prevent horizontal overflow in widgets */
+  .widget-content {
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}

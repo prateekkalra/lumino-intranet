@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { ScrollArea } from '../ui/scroll-area';
+import { EnhancedScrollArea } from '../ui/scroll-area';
 import { useUserStore } from '../../store/userStore';
 
 const getStatusColor = (status: string) => {
@@ -22,7 +22,7 @@ export const TeamWidget = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <ScrollArea className="flex-1 pr-2">
+      <EnhancedScrollArea className="flex-1 pr-2">
         <div className="space-y-4">
           {teamMembers.slice(0, 8).map((member) => (
             <div key={member.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
@@ -49,7 +49,7 @@ export const TeamWidget = () => {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </EnhancedScrollArea>
       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
           {teamMembers.filter(m => m.status === 'available').length} available • {teamMembers.length} total

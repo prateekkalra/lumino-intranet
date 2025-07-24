@@ -1,6 +1,6 @@
 import { Calendar, Clock, MapPin } from 'lucide-react';
 import { Badge } from '../ui/badge';
-import { ScrollArea } from '../ui/scroll-area';
+import { EnhancedScrollArea } from '../ui/scroll-area';
 
 const mockEvents = [
   {
@@ -60,7 +60,7 @@ export const CalendarWidget = () => {
         </span>
       </div>
       
-      <ScrollArea className="flex-1 pr-2">
+      <EnhancedScrollArea className="flex-1 pr-2">
         <div className="space-y-3">
           {mockEvents.map((event) => (
             <div key={event.id} className="p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-200 dark:border-gray-700">
@@ -87,7 +87,7 @@ export const CalendarWidget = () => {
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </EnhancedScrollArea>
     </div>
   );
 };
