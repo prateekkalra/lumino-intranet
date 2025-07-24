@@ -42,7 +42,7 @@ const WidgetRenderer: React.FC<{ type: WidgetType }> = ({ type }) => {
 };
 
 export const DashboardGrid: React.FC = () => {
-  const { layout, isEditMode, setEditMode, updateWidgetPosition } = useDashboardStore();
+  const { layout, isEditMode, setEditMode, swapWidgetPositions } = useDashboardStore();
 
   const handleDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
@@ -62,9 +62,8 @@ export const DashboardGrid: React.FC = () => {
     const targetWidget = layout.widgets.find(w => w.id === destination.droppableId);
 
     if (draggedWidget && targetWidget) {
-      // Swap positions
-      updateWidgetPosition(draggedWidget.id, targetWidget.position);
-      updateWidgetPosition(targetWidget.id, draggedWidget.position);
+      // Use atomic swap to avoid overlap validation issues
+      swapWidgetPositions(draggedWidget.id, targetWidget.id);
     }
   };
 
