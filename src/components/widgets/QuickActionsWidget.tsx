@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '../ui/button';
+import { EnhancedScrollArea } from '../ui/scroll-area';
 import {
   Calendar,
   DollarSign,
@@ -118,22 +119,24 @@ export const QuickActionsWidget: React.FC = () => {
         </p>
       </div>
 
-      {/* Actions Grid */}
-      <div className="grid grid-cols-2 gap-3 flex-1 content-start">
-        {quickActions.map((action) => (
-          <Button
-            key={action.id}
-            onClick={action.onClick}
-            className={`${action.color} h-16 px-3 flex flex-col items-center justify-center gap-2 hover:brightness-110 transition-all duration-200 shadow-sm hover:shadow-md rounded-lg`}
-            variant="default"
-          >
-            {getIcon(action.icon)}
-            <span className="text-xs font-medium text-center leading-tight">
-              {action.label}
-            </span>
-          </Button>
-        ))}
-      </div>
+      {/* Actions Grid with ScrollArea */}
+      <EnhancedScrollArea className="flex-1 pr-2">
+        <div className="grid grid-cols-2 gap-3">
+          {quickActions.map((action) => (
+            <Button
+              key={action.id}
+              onClick={action.onClick}
+              className={`${action.color} h-16 px-3 flex flex-col items-center justify-center gap-2 hover:brightness-110 transition-all duration-200 shadow-sm hover:shadow-md rounded-lg`}
+              variant="default"
+            >
+              {getIcon(action.icon)}
+              <span className="text-xs font-medium text-center leading-tight">
+                {action.label}
+              </span>
+            </Button>
+          ))}
+        </div>
+      </EnhancedScrollArea>
 
       {/* Footer Stats */}
       <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">

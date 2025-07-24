@@ -16,7 +16,7 @@ import type { WidgetConfig, WidgetType } from '../../types/dashboard';
 
 const GRID_COLS = 12;
 const GRID_GAP = 20;
-const WIDGET_MIN_HEIGHT = 220;
+const WIDGET_MIN_HEIGHT = 280;
 
 const WidgetRenderer: React.FC<{ type: WidgetType }> = ({ type }) => {
   switch (type) {

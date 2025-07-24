@@ -123,41 +123,48 @@ export const AnalyticsWidget = () => {
       </div>
 
       {/* Chart */}
-      <div className="flex-1 min-h-0">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data}>
-            <XAxis 
-              dataKey="month" 
-              axisLine={false}
-              tickLine={false}
-              fontSize={12}
-              stroke="#6B7280"
-            />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              fontSize={12}
-              stroke="#6B7280"
-            />
-            <Tooltip 
-              contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #E5E7EB',
-                borderRadius: '8px',
-                fontSize: '12px',
-              }}
-              formatter={(value) => [`${config.unit}${value}`, config.title]}
-            />
-            <Line
-              type="monotone"
-              dataKey="value"
-              stroke={config.color}
-              strokeWidth={2}
-              dot={{ fill: config.color, strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: config.color, strokeWidth: 2 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      <div className="flex-1 min-h-0 w-full">
+        <div className="h-full w-full min-h-[120px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart 
+              data={data}
+              margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+            >
+              <XAxis 
+                dataKey="month" 
+                axisLine={false}
+                tickLine={false}
+                fontSize={12}
+                stroke="#6B7280"
+                interval="preserveStartEnd"
+              />
+              <YAxis 
+                axisLine={false}
+                tickLine={false}
+                fontSize={12}
+                stroke="#6B7280"
+                width={40}
+              />
+              <Tooltip 
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: '1px solid #E5E7EB',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                }}
+                formatter={(value) => [`${config.unit}${value}`, config.title]}
+              />
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke={config.color}
+                strokeWidth={2}
+                dot={{ fill: config.color, strokeWidth: 2, r: 4 }}
+                activeDot={{ r: 6, stroke: config.color, strokeWidth: 2 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
       </div>
 
       {/* Footer */}

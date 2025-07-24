@@ -42,7 +42,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
       } ${isEditMode && !isDragging ? 'ring-1 ring-blue-300/50 hover:ring-2 hover:ring-blue-400/50' : ''}`}>
         
         {/* Widget Header */}
-        <div className={`flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-700 transition-colors duration-200 ${
+        <div className={`flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-gray-700 transition-colors duration-200 ${
           isDragging 
             ? 'bg-blue-50/70 dark:bg-blue-900/30' 
             : 'bg-gray-50/50 dark:bg-gray-900/50'
@@ -94,7 +94,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
         </div>
 
         {/* Widget Content */}
-        <div className="flex-1 p-5 overflow-hidden relative">
+        <div className="flex-1 p-4 overflow-hidden relative">
           {widget.isVisible ? (
             <div className="h-full">{children}</div>
           ) : (
