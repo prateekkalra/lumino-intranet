@@ -145,4 +145,16 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
+
+  /* Fix for react-beautiful-dnd cursor offset in modal dialogs */
+  .tasks-modal-fix [data-rbd-draggable-id] {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+  }
+
+  /* Ensure dragged elements follow cursor properly */
+  .tasks-modal-fix [data-rbd-drag-handle-draggable-id] {
+    position: fixed !important;
+  }
 }
