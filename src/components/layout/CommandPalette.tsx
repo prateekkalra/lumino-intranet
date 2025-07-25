@@ -15,7 +15,8 @@ import {
   Shield,
   Activity,
   ChevronRight,
-  Command as CommandIcon
+  Command as CommandIcon,
+  Heart
 } from "lucide-react"
 
 import {
@@ -200,6 +201,18 @@ export function CommandPalette() {
       keywords: ['team', 'spaces', 'department', 'resources'],
       action: () => {
         openDialog('team-spaces')
+        setOpen(false)
+      }
+    },
+    {
+      id: 'open-wellness-hub',
+      title: 'Wellness Hub',
+      description: 'Health challenges and mental wellness',
+      icon: Heart,
+      category: 'dialogs',
+      keywords: ['wellness', 'health', 'fitness', 'mental', 'challenges'],
+      action: () => {
+        openDialog('wellness-hub')
         setOpen(false)
       }
     },

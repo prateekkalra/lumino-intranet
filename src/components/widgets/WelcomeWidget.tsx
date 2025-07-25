@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Sun, Cloud, CloudRain, Snowflake } from 'lucide-react';
 import { EnhancedScrollArea } from '../ui/scroll-area';
+import { Button } from '../ui/button';
 import { useUserStore } from '../../store/userStore';
+import { useDialog } from '../../contexts/DialogContext';
+import { useToast } from '../ui/use-toast';
 import type { WeatherData, ScheduleEvent } from '../../types/dashboard';
 
 const getGreeting = (): string => {
@@ -62,6 +65,8 @@ const mockScheduleEvents: ScheduleEvent[] = [
 
 export const WelcomeWidget: React.FC = () => {
   const { currentUser } = useUserStore();
+  const { openDialog } = useDialog();
+  const { toast } = useToast();
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -86,6 +91,36 @@ export const WelcomeWidget: React.FC = () => {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
+    });
+  };
+
+  const handleWeatherClick = () => {
+    toast({
+      title: "Weather Details",
+      description: `${mockWeatherData.condition} in ${mockWeatherData.location}. Perfect day to be productive!`,
+    });
+  };
+
+  const handleScheduleEventClick = (event: ScheduleEvent) => {
+    if (event.type === 'meeting') {
+      openDialog('calendar');
+      toast({
+        title: "Meeting Details",
+        description: `${event.title} at ${event.time}`,
+      });
+    } else if (event.type === 'deadline') {
+      toast({
+        title: "Deadline Reminder",
+        description: `${event.title} is due at ${event.time}`,
+      });
+    }
+  };
+
+  const handleViewFullSchedule = () => {
+    openDialog('calendar');
+    toast({
+      title: "Calendar opened",
+      description: "View your complete schedule",
     });
   };
 
@@ -119,7 +154,10 @@ export const WelcomeWidget: React.FC = () => {
         {/* Weather and Schedule Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {/* Weather Card */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+          <div 
+            className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800 cursor-pointer hover:shadow-md transition-shadow"
+            onClick={handleWeatherClick}
+          >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 {getWeatherIcon(mockWeatherData.condition)}
@@ -132,7 +170,7 @@ export const WelcomeWidget: React.FC = () => {
                 <span>{mockWeatherData.location}</span>
               </div>
             </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300">
+            <p className="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
               {mockWeatherData.condition}
             </p>
           </div>
@@ -144,7 +182,11 @@ export const WelcomeWidget: React.FC = () => {
             </h4>
             <div className="space-y-2">
               {mockScheduleEvents.slice(0, 3).map((event) => (
-                <div key={event.id} className="flex items-center gap-2">
+                <div 
+                  key={event.id} 
+                  className="flex items-center gap-2 cursor-pointer hover:bg-white/50 rounded p-1 transition-colors"
+                  onClick={() => handleScheduleEventClick(event)}
+                >
                   <div className={`w-2 h-2 rounded-full ${
                     event.type === 'meeting' 
                       ? 'bg-green-500' 
@@ -163,11 +205,21 @@ export const WelcomeWidget: React.FC = () => {
                 </div>
               ))}
             </div>
-            {mockScheduleEvents.length > 3 && (
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
-                +{mockScheduleEvents.length - 3} more events
-              </p>
-            )}
+            <div className="flex items-center justify-between mt-3">
+              {mockScheduleEvents.length > 3 && (
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  +{mockScheduleEvents.length - 3} more events
+                </p>
+              )}
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={handleViewFullSchedule}
+                className="h-6 px-2 text-xs text-orange-600 hover:text-orange-700"
+              >
+                View All
+              </Button>
+            </div>
           </div>
         </div>
 

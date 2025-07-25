@@ -20,6 +20,7 @@ import { TimeTrackingDialog } from "@/components/dialogs/TimeTrackingDialog"
 import { ResourceBookingDialog } from "@/components/dialogs/ResourceBookingDialog"
 import { SettingsDialog } from "@/components/dialogs/SettingsDialog"
 import { TeamSpacesDialog } from "@/components/dialogs/TeamSpacesDialog"
+import { WellnessHubDialog } from "@/components/dialogs/WellnessHubDialog"
 
 function AppContent() {
   const { isOpen: isSidebarOpen } = useSidebar()
@@ -42,6 +43,7 @@ function AppContent() {
       <ResourceBookingDialog />
       <SettingsDialog />
       <TeamSpacesDialog />
+      <WellnessHubDialog />
       
       {/* Main app content */}
       <main 

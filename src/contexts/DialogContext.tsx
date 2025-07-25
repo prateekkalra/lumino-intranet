@@ -15,6 +15,7 @@ type DialogType =
   | 'resource-booking'
   | 'settings'
   | 'team-spaces'
+  | 'wellness-hub'
 
 interface DialogContextType {
   openDialogs: Set<DialogType>

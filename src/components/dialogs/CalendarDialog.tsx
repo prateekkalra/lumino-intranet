@@ -35,6 +35,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { useDialog } from "@/contexts/DialogContext"
+import { useToast } from "@/components/ui/use-toast"
 
 interface CalendarEvent {
   id: string
@@ -183,11 +184,58 @@ const mockCalendarEvents: CalendarEvent[] = [
 
 export function CalendarDialog() {
   const { isDialogOpen, closeDialog } = useDialog()
-  const [events] = React.useState(mockCalendarEvents)
+  const { toast } = useToast()
+  const [events, setEvents] = React.useState(mockCalendarEvents)
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date())
   const [viewMode, setViewMode] = React.useState<'calendar' | 'agenda'>('calendar')
   const [searchQuery, setSearchQuery] = React.useState("")
   const [currentMonth, setCurrentMonth] = React.useState(new Date())
+
+  const handleEventClick = (event: CalendarEvent) => {
+    toast({
+      title: event.title,
+      description: `${event.startTime} • ${event.type} • ${event.location || 'Location TBD'}`,
+    });
+  };
+
+  const handleCreateEvent = () => {
+    const newEvent: CalendarEvent = {
+      id: `event-${Date.now()}`,
+      title: 'New Event',
+      startTime: '10:00 AM',
+      endTime: '11:00 AM',
+      date: selectedDate || new Date(),
+      type: 'meeting',
+      location: 'To be confirmed',
+      attendees: [],
+      priority: 'medium',
+      color: 'blue',
+      isRecurring: false
+    };
+    
+    setEvents(prev => [...prev, newEvent]);
+    toast({
+      title: "Event Created",
+      description: "New event has been added to your calendar",
+    });
+  };
+
+  const handleEditEvent = (event: CalendarEvent, e: React.MouseEvent) => {
+    e.stopPropagation();
+    toast({
+      title: "Edit Event",
+      description: `Editing "${event.title}"`,
+    });
+  };
+
+  const handleDeleteEvent = (eventId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEvents(prev => prev.filter(event => event.id !== eventId));
+    toast({
+      title: "Event Deleted",
+      description: "Event has been removed from your calendar",
+    });
+  };
 
   const getEventColor = (color: string) => {
     switch (color) {
@@ -250,7 +298,7 @@ export function CalendarDialog() {
   const EventCard = ({ event }: { event: CalendarEvent }) => (
     <div 
       className={`p-3 rounded-lg border transition-all duration-200 hover:shadow-md cursor-pointer ${getEventColor(event.color)}`}
-      onClick={() => console.log('Selected event:', event.id)}
+      onClick={() => handleEventClick(event)}
     >
       <div className="flex items-start justify-between gap-2 mb-2">
         <h4 className="font-semibold text-sm truncate">{event.title}</h4>
@@ -291,6 +339,28 @@ export function CalendarDialog() {
           </div>
         )}
       </div>
+      
+      {/* Action buttons */}
+      <div className="flex items-center justify-end gap-1 mt-2 pt-2 border-t border-current/20">
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => handleEditEvent(event, e)}
+          className="h-6 px-2 text-xs"
+        >
+          <Edit className="h-3 w-3 mr-1" />
+          Edit
+        </Button>
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={(e) => handleDeleteEvent(event.id, e)}
+          className="h-6 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+        >
+          <Trash2 className="h-3 w-3 mr-1" />
+          Delete
+        </Button>
+      </div>
     </div>
   )
 
@@ -324,7 +394,7 @@ export function CalendarDialog() {
                   className="pl-9 w-64"
                 />
               </div>
-              <Button size="sm">
+              <Button size="sm" onClick={handleCreateEvent}>
                 <Plus className="h-4 w-4 mr-1" />
                 New Event
               </Button>

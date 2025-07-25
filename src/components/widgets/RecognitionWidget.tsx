@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
+import { Button } from '../ui/button';
 import { EnhancedScrollArea } from '../ui/scroll-area';
-import { Heart, Trophy, Star, Zap } from 'lucide-react';
+import { Heart, Trophy, Star, Zap, Plus } from 'lucide-react';
+import { useDialog } from '../../contexts/DialogContext';
+import { useToast } from '../ui/use-toast';
 
 const mockRecognitions = [
   {
@@ -103,14 +107,75 @@ const getTimeAgo = (date: Date): string => {
 };
 
 export const RecognitionWidget = () => {
+  const [recognitions, setRecognitions] = useState(mockRecognitions);
+  const { openDialog } = useDialog();
+  const { toast } = useToast();
+
+  const handleReactionClick = (recognitionId: string, emoji: string) => {
+    setRecognitions(prev => prev.map(recognition => {
+      if (recognition.id === recognitionId) {
+        const existingReaction = recognition.reactions.find(r => r.emoji === emoji);
+        if (existingReaction) {
+          return {
+            ...recognition,
+            reactions: recognition.reactions.map(r => 
+              r.emoji === emoji ? { ...r, count: r.count + 1 } : r
+            )
+          };
+        } else {
+          return {
+            ...recognition,
+            reactions: [...recognition.reactions, { emoji, count: 1, users: [] }]
+          };
+        }
+      }
+      return recognition;
+    }));
+
+    toast({
+      title: "Reaction added",
+      description: `You reacted with ${emoji}`,
+    });
+  };
+
+  const handleGiveRecognition = () => {
+    openDialog('team-feed');
+    toast({
+      title: "Give Recognition",
+      description: "Opening team feed to give recognition...",
+    });
+  };
+
+  const handleRecognitionClick = (recognition: any) => {
+    toast({
+      title: "Recognition Details",
+      description: `${recognition.recipient.name} - ${recognition.message}`,
+    });
+  };
+
   return (
     <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-medium text-gray-900 dark:text-white">Recognition Wall</h3>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={handleGiveRecognition}
+          className="h-6 px-2 text-xs"
+        >
+          <Plus className="h-3 w-3 mr-1" />
+          Give Recognition
+        </Button>
+      </div>
+
       <EnhancedScrollArea className="flex-1 pr-2">
         <div className="space-y-4">
-          {mockRecognitions.map((recognition) => (
+          {recognitions.map((recognition) => (
             <div
               key={recognition.id}
-              className="bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800"
+              className="bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800 cursor-pointer hover:shadow-md transition-shadow"
+              onClick={() => handleRecognitionClick(recognition)}
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-3">
@@ -163,13 +228,32 @@ export const RecognitionWidget = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   {recognition.reactions.map((reaction, index) => (
-                    <div key={index} className="flex items-center gap-1 text-xs">
+                    <button
+                      key={index}
+                      className="flex items-center gap-1 text-xs hover:bg-white/50 rounded px-1 py-0.5 transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleReactionClick(recognition.id, reaction.emoji);
+                      }}
+                    >
                       <span>{reaction.emoji}</span>
                       <span className="text-gray-600 dark:text-gray-400">
                         {reaction.count}
                       </span>
-                    </div>
+                    </button>
                   ))}
+                  <button
+                    className="flex items-center gap-1 text-xs hover:bg-white/50 rounded px-1 py-0.5 transition-colors text-gray-500"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const emojis = ['👍', '❤️', '👏', '🎉', '🚀'];
+                      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                      handleReactionClick(recognition.id, randomEmoji);
+                    }}
+                  >
+                    <Plus className="h-3 w-3" />
+                    <span>React</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -180,7 +264,7 @@ export const RecognitionWidget = () => {
       {/* Footer */}
       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
-          <span>{mockRecognitions.length} recognitions</span>
+          <span>{recognitions.length} recognitions</span>
           <span>This week</span>
         </div>
       </div>
