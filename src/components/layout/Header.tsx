@@ -40,6 +40,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { useSidebar } from "@/contexts/SidebarContext"
+import { useDialog } from "@/contexts/DialogContext"
 
 interface Notification {
   id: string
@@ -96,6 +97,7 @@ export function Header() {
   const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
   const { isOpen: isSidebarOpen, toggle: toggleSidebar } = useSidebar()
+  const { openDialog } = useDialog()
   
   const unreadCount = notifications.filter(n => !n.isRead).length
 
@@ -320,7 +322,13 @@ export function Header() {
                 Profile
                 <span className="ml-auto text-xs text-muted-foreground">⌘P</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem 
+                className="cursor-pointer"
+                onClick={() => {
+                  openDialog('settings')
+                  setIsUserMenuOpen(false)
+                }}
+              >
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
                 <span className="ml-auto text-xs text-muted-foreground">⌘,</span>

@@ -12,6 +12,9 @@ type DialogType =
   | 'time-tracking'
   | 'directory'
   | 'team-feed'
+  | 'resource-booking'
+  | 'settings'
+  | 'team-spaces'
 
 interface DialogContextType {
   openDialogs: Set<DialogType>

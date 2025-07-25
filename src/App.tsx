@@ -1,5 +1,7 @@
 import { Header } from "@/components/layout/Header"
 import { RightSidebar } from "@/components/layout/RightSidebar"
+import { FloatingActionButton } from "@/components/layout/FloatingActionButton"
+import { CommandPalette } from "@/components/layout/CommandPalette"
 import { SidebarProvider, useSidebar } from "@/contexts/SidebarContext"
 import { DialogProvider } from "@/contexts/DialogContext"
 import { Toaster } from "@/components/ui/toaster"
@@ -15,6 +17,9 @@ import { ServiceDeskDialog } from "@/components/dialogs/ServiceDeskDialog"
 import { ProjectManagementDialog } from "@/components/dialogs/ProjectManagementDialog"
 import { KnowledgeBaseDialog } from "@/components/dialogs/KnowledgeBaseDialog"
 import { TimeTrackingDialog } from "@/components/dialogs/TimeTrackingDialog"
+import { ResourceBookingDialog } from "@/components/dialogs/ResourceBookingDialog"
+import { SettingsDialog } from "@/components/dialogs/SettingsDialog"
+import { TeamSpacesDialog } from "@/components/dialogs/TeamSpacesDialog"
 
 function AppContent() {
   const { isOpen: isSidebarOpen } = useSidebar()
@@ -34,6 +39,9 @@ function AppContent() {
       <ProjectManagementDialog />
       <KnowledgeBaseDialog />
       <TimeTrackingDialog />
+      <ResourceBookingDialog />
+      <SettingsDialog />
+      <TeamSpacesDialog />
       
       {/* Main app content */}
       <main 
@@ -43,6 +51,12 @@ function AppContent() {
       >
         <DashboardGrid />
       </main>
+      
+      {/* Floating Action Button */}
+      <FloatingActionButton />
+      
+      {/* Command Palette */}
+      <CommandPalette />
     </div>
   )
 }
