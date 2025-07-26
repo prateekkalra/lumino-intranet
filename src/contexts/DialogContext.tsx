@@ -18,6 +18,7 @@ type DialogType =
   | 'wellness-hub'
   | 'profile'
   | 'help-support'
+  | 'quick-note'
 
 interface DialogContextType {
   openDialogs: Set<DialogType>

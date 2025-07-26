@@ -241,9 +241,10 @@ export function CommandPalette() {
       category: 'actions',
       keywords: ['note', 'memo', 'write'],
       action: () => {
+        openDialog('quick-note')
         toast({
-          title: "Quick Note",
-          description: "Opening note editor...",
+          title: "Quick Note opened",
+          description: "Start jotting down your thoughts and ideas",
         })
         setOpen(false)
       }

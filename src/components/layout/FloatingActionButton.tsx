@@ -40,9 +40,10 @@ export function FloatingActionButton() {
       icon: StickyNote,
       color: 'bg-blue-500 hover:bg-blue-600',
       onClick: () => {
+        openDialog('quick-note')
         toast({
-          title: "Quick Note",
-          description: "Opening quick note editor...",
+          title: "Quick Note opened",
+          description: "Start jotting down your thoughts and ideas",
         })
         setIsExpanded(false)
       }

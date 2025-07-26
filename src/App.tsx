@@ -23,6 +23,7 @@ import { TeamSpacesDialog } from "@/components/dialogs/TeamSpacesDialog"
 import { WellnessHubDialog } from "@/components/dialogs/WellnessHubDialog"
 import { ProfileDialog } from "@/components/dialogs/ProfileDialog"
 import { HelpSupportDialog } from "@/components/dialogs/HelpSupportDialog"
+import { QuickNoteDialog } from "@/components/dialogs/QuickNoteDialog"
 
 function AppContent() {
   const { isOpen: isSidebarOpen } = useSidebar()
@@ -48,6 +49,7 @@ function AppContent() {
       <WellnessHubDialog />
       <ProfileDialog />
       <HelpSupportDialog />
+      <QuickNoteDialog />
       
       {/* Main app content */}
       <main 

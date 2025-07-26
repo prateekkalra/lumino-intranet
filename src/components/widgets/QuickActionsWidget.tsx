@@ -16,10 +16,17 @@ import {
   BookOpen,
   Coffee,
   Car,
+  StickyNote,
 } from 'lucide-react';
 // import type { QuickAction } from '../../types/dashboard';
 
 const quickActions = [
+  {
+    id: 'quick-note',
+    label: 'Quick Note',
+    icon: 'StickyNote',
+    color: 'bg-amber-500 hover:bg-amber-600 text-white',
+  },
   {
     id: 'book-room',
     label: 'Book Room',
@@ -71,9 +78,11 @@ const quickActions = [
 ];
 
 const getIcon = (iconName: string) => {
-  const iconProps = { className: 'h-5 w-5' };
+  const iconProps = { className: 'h-4 w-4' };
   
   switch (iconName) {
+    case 'StickyNote':
+      return <StickyNote {...iconProps} />;
     case 'Calendar':
       return <Calendar {...iconProps} />;
     case 'DollarSign':
@@ -109,6 +118,13 @@ export const QuickActionsWidget: React.FC = () => {
 
   const handleAction = (actionId: string) => {
     switch (actionId) {
+      case 'quick-note':
+        openDialog('quick-note');
+        toast({
+          title: "Quick Note opened",
+          description: "Start jotting down your thoughts and ideas",
+        });
+        break;
       case 'book-room':
         openDialog('calendar');
         toast({
@@ -191,12 +207,12 @@ export const QuickActionsWidget: React.FC = () => {
 
       {/* Actions Grid with ScrollArea */}
       <EnhancedScrollArea className="flex-1 pr-2">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-2">
           {actionsWithHandlers.map((action) => (
             <Button
               key={action.id}
               onClick={action.onClick}
-              className={`${action.color} h-16 px-3 flex flex-col items-center justify-center gap-2 hover:brightness-110 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md rounded-lg active:scale-95`}
+              className={`${action.color} h-12 px-1 flex flex-col items-center justify-center gap-1 hover:brightness-110 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md rounded-md active:scale-95`}
               variant="default"
             >
               {getIcon(action.icon)}
@@ -211,8 +227,8 @@ export const QuickActionsWidget: React.FC = () => {
       {/* Footer Stats */}
       <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
-          <span>Most used: Book Room</span>
-          <span>8 actions today</span>
+          <span>Most used: Quick Note</span>
+          <span>9 actions available</span>
         </div>
       </div>
     </div>
