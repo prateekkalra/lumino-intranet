@@ -317,7 +317,13 @@ export function Header() {
                 Dashboard
                 <span className="ml-auto text-xs text-muted-foreground">⌘D</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem 
+                className="cursor-pointer"
+                onClick={() => {
+                  openDialog('profile')
+                  setIsUserMenuOpen(false)
+                }}
+              >
                 <User className="mr-2 h-4 w-4" />
                 Profile
                 <span className="ml-auto text-xs text-muted-foreground">⌘P</span>
@@ -334,7 +340,13 @@ export function Header() {
                 <span className="ml-auto text-xs text-muted-foreground">⌘,</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem 
+                className="cursor-pointer"
+                onClick={() => {
+                  openDialog('help-support')
+                  setIsUserMenuOpen(false)
+                }}
+              >
                 <HelpCircle className="mr-2 h-4 w-4" />
                 Help & Support
                 <span className="ml-auto text-xs text-muted-foreground">⌘?</span>

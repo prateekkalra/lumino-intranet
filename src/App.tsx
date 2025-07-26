@@ -21,6 +21,8 @@ import { ResourceBookingDialog } from "@/components/dialogs/ResourceBookingDialo
 import { SettingsDialog } from "@/components/dialogs/SettingsDialog"
 import { TeamSpacesDialog } from "@/components/dialogs/TeamSpacesDialog"
 import { WellnessHubDialog } from "@/components/dialogs/WellnessHubDialog"
+import { ProfileDialog } from "@/components/dialogs/ProfileDialog"
+import { HelpSupportDialog } from "@/components/dialogs/HelpSupportDialog"
 
 function AppContent() {
   const { isOpen: isSidebarOpen } = useSidebar()
@@ -44,6 +46,8 @@ function AppContent() {
       <SettingsDialog />
       <TeamSpacesDialog />
       <WellnessHubDialog />
+      <ProfileDialog />
+      <HelpSupportDialog />
       
       {/* Main app content */}
       <main 

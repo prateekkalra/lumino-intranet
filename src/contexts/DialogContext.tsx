@@ -16,6 +16,8 @@ type DialogType =
   | 'settings'
   | 'team-spaces'
   | 'wellness-hub'
+  | 'profile'
+  | 'help-support'
 
 interface DialogContextType {
   openDialogs: Set<DialogType>
