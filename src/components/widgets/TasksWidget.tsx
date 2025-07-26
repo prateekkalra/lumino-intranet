@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { TasksModal } from '../dialogs/TasksModal';
 import { Plus, Clock, CheckCircle2, Circle, ArrowRight, Calendar } from 'lucide-react';
 import { Task, TaskStatus, INITIAL_TASKS, getPriorityColor, getColumnConfig } from '../../types/tasks';
+import { useSearchProvider } from '../../hooks/useSearchProvider';
+import { SearchResult } from '../../types/search';
 
 const getStatusIcon = (status: TaskStatus) => {
   switch (status) {
@@ -23,6 +25,31 @@ export const TasksWidget = () => {
   const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast } = useToast();
+
+  // Create search provider for tasks
+  const searchProvider = useMemo(() => ({
+    getSearchableData: (): SearchResult[] => {
+      return tasks.map(task => ({
+        id: task.id,
+        title: task.title,
+        description: task.description || `${task.priority} priority task due ${task.dueDate}`,
+        type: 'task' as const,
+        category: `${task.status} task`,
+        content: `${task.title} ${task.description || ''} ${task.priority} ${task.dueDate}`,
+        widget: 'TasksWidget',
+        metadata: {
+          priority: task.priority,
+          status: task.status,
+          dueDate: task.dueDate,
+          date: task.createdAt || new Date()
+        },
+        action: () => setIsModalOpen(true)
+      }));
+    }
+  }), [tasks]);
+
+  // Register with search service
+  useSearchProvider('TasksWidget', searchProvider);
 
   const handleTasksChange = (updatedTasks: Task[]) => {
     setTasks(updatedTasks);

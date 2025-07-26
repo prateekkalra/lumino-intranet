@@ -4,6 +4,9 @@ import { Button } from '../ui/button';
 import { EnhancedScrollArea } from '../ui/scroll-area';
 import { useDialog } from '../../contexts/DialogContext';
 import { useToast } from '../ui/use-toast';
+import { useMemo } from 'react';
+import { useSearchProvider } from '../../hooks/useSearchProvider';
+import { SearchResult } from '../../types/search';
 
 const mockEvents = [
   {
@@ -56,6 +59,36 @@ const getEventColor = (type: string) => {
 export const CalendarWidget = () => {
   const { openDialog } = useDialog();
   const { toast } = useToast();
+
+  // Create search provider for calendar events
+  const searchProvider = useMemo(() => ({
+    getSearchableData: (): SearchResult[] => {
+      return mockEvents.map(event => ({
+        id: event.id,
+        title: event.title,
+        description: `${event.type} at ${event.time} on ${event.date}${event.location ? ` in ${event.location}` : ''}`,
+        type: 'event' as const,
+        category: event.type,
+        content: `${event.title} ${event.time} ${event.date} ${event.location}`,
+        widget: 'CalendarWidget',
+        metadata: {
+          time: event.time,
+          date: event.date,
+          location: event.location,
+          eventType: event.type
+        },
+        action: () => {
+          toast({
+            title: "Calendar Event",
+            description: `Opening: ${event.title}`,
+          });
+        }
+      }));
+    }
+  }), [toast]);
+
+  // Register with search service
+  useSearchProvider('CalendarWidget', searchProvider);
 
   const handleEventClick = (event: any) => {
     openDialog('calendar');

@@ -17,7 +17,8 @@ import {
   FileText,
   Award,
   PanelRightOpen,
-  PanelRightClose
+  PanelRightClose,
+  Command
 } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
@@ -39,8 +40,11 @@ import {
 } from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { SearchResults } from "@/components/ui/search-results"
 import { useSidebar } from "@/contexts/SidebarContext"
 import { useDialog } from "@/contexts/DialogContext"
+import { searchService } from "@/lib/searchService"
+import { SearchResult } from "@/types/search"
 
 interface Notification {
   id: string
@@ -93,13 +97,103 @@ const mockNotifications: Notification[] = [
 
 export function Header() {
   const [searchValue, setSearchValue] = React.useState("")
+  const [searchResults, setSearchResults] = React.useState<SearchResult[]>([])
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false)
+  const [isSearching, setIsSearching] = React.useState(false)
   const [notifications, setNotifications] = React.useState<Notification[]>(mockNotifications)
   const [isNotificationsOpen, setIsNotificationsOpen] = React.useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = React.useState(false)
   const { isOpen: isSidebarOpen, toggle: toggleSidebar } = useSidebar()
   const { openDialog } = useDialog()
   
   const unreadCount = notifications.filter(n => !n.isRead).length
+
+  // Search functionality
+  const searchInputRef = React.useRef<HTMLInputElement>(null)
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout | undefined>(undefined)
+
+  // Debounced search function
+  React.useEffect(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+    }
+
+    if (searchValue.trim()) {
+      setIsSearching(true)
+      setIsSearchOpen(true)
+      
+      searchTimeoutRef.current = setTimeout(async () => {
+        try {
+          const results = await searchService.search({
+            query: searchValue,
+            limit: 10
+          })
+          setSearchResults(results)
+        } catch (error) {
+          console.error('Search error:', error)
+          setSearchResults([])
+        } finally {
+          setIsSearching(false)
+        }
+      }, 300) // 300ms debounce
+    } else {
+      setSearchResults([])
+      setIsSearchOpen(false)
+      setIsSearching(false)
+    }
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+    }
+  }, [searchValue])
+
+  // Keyboard shortcuts
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Cmd+K or Ctrl+K to focus search
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        searchInputRef.current?.focus()
+      }
+      
+      // Escape to close search
+      if (e.key === 'Escape' && isSearchOpen) {
+        handleClearSearch()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isSearchOpen])
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value)
+  }
+
+  const handleResultClick = (result: SearchResult) => {
+    if (result.action) {
+      result.action()
+    }
+    handleClearSearch()
+  }
+
+  const handleClearSearch = () => {
+    setSearchValue("")
+    setSearchResults([])
+    setIsSearchOpen(false)
+    setIsMobileSearchOpen(false)
+  }
+
+  const toggleMobileSearch = () => {
+    setIsMobileSearchOpen(!isMobileSearchOpen)
+    if (!isMobileSearchOpen) {
+      // Focus search input when opening mobile search
+      setTimeout(() => searchInputRef.current?.focus(), 100)
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -117,15 +211,30 @@ export function Header() {
           </div>
 
           {/* Desktop Search */}
-          <div className="hidden md:flex relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <div className="hidden md:flex relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
             <Input
+              ref={searchInputRef}
               type="search"
-              placeholder="Search everything..."
+              placeholder="Search everything... (⌘K)"
               value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              onChange={handleSearchChange}
               className="pl-10 w-full bg-muted/50 focus:bg-background transition-colors"
+              onFocus={() => searchValue && setIsSearchOpen(true)}
             />
+            
+            {/* Desktop Search Results */}
+            {isSearchOpen && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-background border rounded-lg shadow-lg z-50">
+                <SearchResults
+                  results={searchResults}
+                  query={searchValue}
+                  isLoading={isSearching}
+                  onResultClick={handleResultClick}
+                  onClearSearch={handleClearSearch}
+                />
+              </div>
+            )}
           </div>
         </div>
 
@@ -136,7 +245,7 @@ export function Header() {
             variant="ghost" 
             size="icon" 
             className="md:hidden h-9 w-9"
-            onClick={() => {/* Toggle mobile search */}}
+            onClick={toggleMobileSearch}
           >
             <Search className="h-4 w-4" />
             <span className="sr-only">Search</span>
@@ -362,19 +471,45 @@ export function Header() {
         </div>
       </div>
 
-      {/* Mobile Search Bar - could be conditionally shown */}
-      <div className="hidden md:hidden border-t border-border/40 p-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search everything..."
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            className="pl-10 w-full bg-muted/50 focus:bg-background transition-colors"
-          />
+      {/* Mobile Search Bar */}
+      {isMobileSearchOpen && (
+        <div className="md:hidden border-t border-border/40 p-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
+            <Input
+              ref={searchInputRef}
+              type="search"
+              placeholder="Search everything..."
+              value={searchValue}
+              onChange={handleSearchChange}
+              className="pl-10 w-full bg-muted/50 focus:bg-background transition-colors"
+              autoFocus
+            />
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-6 px-2"
+              onClick={handleClearSearch}
+            >
+              <Command className="h-3 w-3 mr-1" />
+              ESC
+            </Button>
+          </div>
+          
+          {/* Mobile Search Results */}
+          {(isSearchOpen || searchValue) && (
+            <div className="mt-2 bg-background border rounded-lg shadow-lg">
+              <SearchResults
+                results={searchResults}
+                query={searchValue}
+                isLoading={isSearching}
+                onResultClick={handleResultClick}
+                onClearSearch={handleClearSearch}
+              />
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </header>
   )
 }

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button } from '../ui/button';
 import { EnhancedScrollArea } from '../ui/scroll-area';
 import { useDialog } from '../../contexts/DialogContext';
 import { useToast } from '../ui/use-toast';
+import { useSearchProvider } from '../../hooks/useSearchProvider';
+import { SearchResult } from '../../types/search';
 import {
   Calendar,
   DollarSign,
@@ -189,6 +191,29 @@ export const QuickActionsWidget: React.FC = () => {
         });
     }
   };
+
+  // Create search provider for quick actions
+  const searchProvider = useMemo(() => ({
+    getSearchableData: (): SearchResult[] => {
+      return quickActions.map(action => ({
+        id: action.id,
+        title: action.label,
+        description: `Quick action: ${action.label}`,
+        type: 'action' as const,
+        category: 'quick action',
+        content: `${action.label} ${action.id.replace('-', ' ')}`,
+        widget: 'QuickActionsWidget',
+        metadata: {
+          actionId: action.id,
+          icon: action.icon
+        },
+        action: () => handleAction(action.id)
+      }));
+    }
+  }), [handleAction]);
+
+  // Register with search service
+  useSearchProvider('QuickActionsWidget', searchProvider);
 
   // Update the actions with proper onClick handlers
   const actionsWithHandlers = quickActions.map(action => ({

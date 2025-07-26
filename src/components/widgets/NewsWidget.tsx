@@ -14,6 +14,8 @@ import {
   Plus,
 } from 'lucide-react';
 import type { NewsPost } from '../../types/data';
+import { useSearchProvider } from '../../hooks/useSearchProvider';
+import { SearchResult } from '../../types/search';
 
 // Mock news data
 const mockNewsData: NewsPost[] = [
@@ -107,6 +109,37 @@ export const NewsWidget: React.FC = () => {
   });
   const { toast } = useToast();
   const { openDialog } = useDialog();
+
+  // Create search provider for news
+  const searchProvider = useMemo(() => ({
+    getSearchableData: (): SearchResult[] => {
+      return mockNewsData.map(post => ({
+        id: post.id,
+        title: post.title,
+        description: post.content.substring(0, 150) + '...',
+        type: 'news' as const,
+        category: post.category,
+        content: `${post.title} ${post.content} ${post.author.name} ${post.tags?.join(' ') || ''}`,
+        widget: 'NewsWidget',
+        metadata: {
+          author: post.author.name,
+          category: post.category,
+          likes: post.likes,
+          date: post.publishedAt,
+          tags: post.tags
+        },
+        action: () => {
+          toast({
+            title: "News Article",
+            description: `Opening: ${post.title}`,
+          });
+        }
+      }));
+    }
+  }), [toast]);
+
+  // Register with search service
+  useSearchProvider('NewsWidget', searchProvider);
 
   const categories = ['announcement', 'update', 'event', 'achievement'];
 
