@@ -249,15 +249,23 @@ export function HelpSupportDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => closeDialog('help-support')}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <HelpCircle className="h-5 w-5" />
-            Help & Support
-          </DialogTitle>
-          <DialogDescription>
-            Find answers to common questions, submit support tickets, and access helpful resources.
-          </DialogDescription>
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
+        <DialogHeader className="p-6 pb-4">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Card className="p-2">
+                  <HelpCircle className="h-5 w-5 text-primary" />
+                </Card>
+                <div>
+                  <DialogTitle className="text-xl">Help & Support</DialogTitle>
+                  <DialogDescription>
+                    Find answers to common questions, submit support tickets, and access helpful resources.
+                  </DialogDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
         </DialogHeader>
 
         <Tabs defaultValue="faq" className="flex-1 overflow-hidden">
@@ -271,29 +279,33 @@ export function HelpSupportDialog() {
 
           <ScrollArea className="h-[520px] mt-4">
             <TabsContent value="faq" className="space-y-4">
-              <div className="flex flex-col sm:flex-row gap-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    placeholder="Search FAQ..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-full sm:w-[200px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        placeholder="Search FAQ..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                    <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                      <SelectTrigger className="w-full sm:w-[200px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
 
               <div className="space-y-2">
                 {filteredFAQs.length === 0 ? (
@@ -576,7 +588,7 @@ export function HelpSupportDialog() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600" />
+                      <CheckCircle className="h-4 w-4 text-success-foreground" />
                       System Status
                     </CardTitle>
                     <CardDescription>All systems operational</CardDescription>
@@ -592,27 +604,33 @@ export function HelpSupportDialog() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Dashboard</span>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">Operational</span>
+                      <Card className="p-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-sm">Dashboard</CardTitle>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="h-3 w-3 text-success-foreground" />
+                            <CardDescription className="text-xs text-success-foreground">Operational</CardDescription>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Authentication</span>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">Operational</span>
+                      </Card>
+                      <Card className="p-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-sm">Authentication</CardTitle>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="h-3 w-3 text-success-foreground" />
+                            <CardDescription className="text-xs text-success-foreground">Operational</CardDescription>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">File Storage</span>
-                        <div className="flex items-center gap-2">
-                          <AlertCircle className="h-3 w-3 text-yellow-600" />
-                          <span className="text-xs text-yellow-600">Degraded</span>
+                      </Card>
+                      <Card className="p-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-sm">File Storage</CardTitle>
+                          <div className="flex items-center gap-2">
+                            <AlertCircle className="h-3 w-3 text-warning-foreground" />
+                            <CardDescription className="text-xs text-warning-foreground">Degraded</CardDescription>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     </CardContent>
                   </Card>
 
@@ -624,27 +642,33 @@ export function HelpSupportDialog() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Email Service</span>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">Operational</span>
+                      <Card className="p-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-sm">Email Service</CardTitle>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="h-3 w-3 text-success-foreground" />
+                            <CardDescription className="text-xs text-success-foreground">Operational</CardDescription>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Notifications</span>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">Operational</span>
+                      </Card>
+                      <Card className="p-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-sm">Notifications</CardTitle>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="h-3 w-3 text-success-foreground" />
+                            <CardDescription className="text-xs text-success-foreground">Operational</CardDescription>
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">Calendar Sync</span>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="h-3 w-3 text-green-600" />
-                          <span className="text-xs text-green-600">Operational</span>
+                      </Card>
+                      <Card className="p-3">
+                        <div className="flex items-center justify-between">
+                          <CardTitle className="text-sm">Calendar Sync</CardTitle>
+                          <div className="flex items-center gap-2">
+                            <CheckCircle className="h-3 w-3 text-success-foreground" />
+                            <CardDescription className="text-xs text-success-foreground">Operational</CardDescription>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     </CardContent>
                   </Card>
                 </div>
@@ -655,14 +679,16 @@ export function HelpSupportDialog() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
-                      <div className="flex items-start gap-3 p-3 border rounded-lg">
-                        <Info className="h-4 w-4 text-blue-600 mt-0.5" />
-                        <div className="flex-1">
-                          <p className="text-sm font-medium">Scheduled Maintenance</p>
-                          <p className="text-xs text-muted-foreground">File storage will undergo maintenance on Sunday, 2:00 AM - 4:00 AM PST</p>
-                          <p className="text-xs text-muted-foreground mt-1">Posted 2 days ago</p>
+                      <Card className="p-3">
+                        <div className="flex items-start gap-3">
+                          <Info className="h-4 w-4 text-info-foreground mt-0.5" />
+                          <div className="flex-1">
+                            <CardTitle className="text-sm font-medium mb-1">Scheduled Maintenance</CardTitle>
+                            <CardDescription className="text-xs">File storage will undergo maintenance on Sunday, 2:00 AM - 4:00 AM PST</CardDescription>
+                            <CardDescription className="text-xs mt-1">Posted 2 days ago</CardDescription>
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     </div>
                   </CardContent>
                 </Card>
@@ -670,6 +696,21 @@ export function HelpSupportDialog() {
             </TabsContent>
           </ScrollArea>
         </Tabs>
+        
+        <div className="p-6 pt-4 border-t">
+          <Card>
+            <CardContent className="flex items-center justify-between p-4">
+              <div className="text-sm text-muted-foreground">
+                Help & Support Center • Available 24/7
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => closeDialog('help-support')}>
+                  Close
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </DialogContent>
     </Dialog>
   )

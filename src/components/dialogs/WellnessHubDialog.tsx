@@ -273,11 +273,11 @@ export function WellnessHubDialog() {
 
   const getChallengeColor = (type: Challenge['type']) => {
     switch (type) {
-      case 'fitness': return 'bg-green-100 text-green-700 border-green-200'
-      case 'mental': return 'bg-purple-100 text-purple-700 border-purple-200'
-      case 'social': return 'bg-blue-100 text-blue-700 border-blue-200'
-      case 'nutrition': return 'bg-orange-100 text-orange-700 border-orange-200'
-      default: return 'bg-gray-100 text-gray-700 border-gray-200'
+      case 'fitness': return 'bg-success/10 text-success-foreground border-success/30'
+      case 'mental': return 'bg-secondary/20 text-secondary-foreground border-secondary/30'
+      case 'social': return 'bg-secondary/10 text-secondary-foreground border-secondary'
+      case 'nutrition': return 'bg-warning/10 text-warning-foreground border-warning/30'
+      default: return 'bg-muted/50 text-muted-foreground border-border'
     }
   }
 
@@ -303,10 +303,10 @@ export function WellnessHubDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => closeDialog('wellness-hub')}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-red-500" />
+            <Heart className="h-5 w-5 text-destructive" />
             Wellness Hub
           </DialogTitle>
           <DialogDescription>
@@ -381,7 +381,7 @@ export function WellnessHubDialog() {
                         )}
 
                         <div className="flex items-center gap-2 text-sm">
-                          <Award className="h-4 w-4 text-yellow-500" />
+                          <Award className="h-4 w-4 text-warning" />
                           <span className="text-muted-foreground">Reward: {challenge.reward}</span>
                         </div>
 
@@ -396,7 +396,7 @@ export function WellnessHubDialog() {
                                 size="sm" 
                                 variant="ghost" 
                                 onClick={() => handleLeaveChallenge(challenge.id)}
-                                className="text-red-600 hover:text-red-700"
+                                className="text-destructive hover:text-destructive/80"
                               >
                                 Leave
                               </Button>
@@ -426,7 +426,7 @@ export function WellnessHubDialog() {
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-blue-100 text-blue-700">
+                          <div className="p-2 rounded-lg bg-info text-info-foreground">
                             {getResourceIcon(resource.type)}
                           </div>
                           <div className="flex-1">
@@ -440,7 +440,7 @@ export function WellnessHubDialog() {
                           size="sm"
                           variant="ghost"
                           onClick={() => handleBookmarkResource(resource.id)}
-                          className={resource.isBookmarked ? "text-yellow-600" : "text-gray-400"}
+                          className={resource.isBookmarked ? "text-warning" : "text-muted-foreground"}
                         >
                           <Star className={`h-4 w-4 ${resource.isBookmarked ? "fill-current" : ""}`} />
                         </Button>
@@ -465,8 +465,8 @@ export function WellnessHubDialog() {
                                 key={i}
                                 className={`h-3 w-3 ${
                                   i < Math.floor(resource.rating) 
-                                    ? "text-yellow-400 fill-current" 
-                                    : "text-gray-300"
+                                    ? "text-warning fill-current" 
+                                    : "text-muted-foreground/60"
                                 }`}
                               />
                             ))}
@@ -542,8 +542,8 @@ export function WellnessHubDialog() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-green-100">
-                        <CheckCircle className="h-6 w-6 text-green-600" />
+                      <div className="p-2 rounded-lg bg-success/10">
+                        <CheckCircle className="h-6 w-6 text-success-foreground" />
                       </div>
                       <div>
                         <p className="text-2xl font-bold">2</p>
@@ -556,8 +556,8 @@ export function WellnessHubDialog() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-100">
-                        <Zap className="h-6 w-6 text-blue-600" />
+                      <div className="p-2 rounded-lg bg-info">
+                        <Zap className="h-6 w-6 text-info-foreground" />
                       </div>
                       <div>
                         <p className="text-2xl font-bold">1,247</p>
@@ -570,8 +570,8 @@ export function WellnessHubDialog() {
                 <Card>
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-purple-100">
-                        <Trophy className="h-6 w-6 text-purple-600" />
+                      <div className="p-2 rounded-lg bg-secondary/20">
+                        <Trophy className="h-6 w-6 text-secondary-foreground" />
                       </div>
                       <div>
                         <p className="text-2xl font-bold">5</p>
@@ -596,28 +596,28 @@ export function WellnessHubDialog() {
                         <span>Physical Fitness</span>
                         <span>73%</span>
                       </div>
-                      <Progress value={73} className="bg-green-100" />
+                      <Progress value={73} className="bg-success/10" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-2">
                         <span>Mental Wellness</span>
                         <span>45%</span>
                       </div>
-                      <Progress value={45} className="bg-purple-100" />
+                      <Progress value={45} className="bg-secondary/20" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-2">
                         <span>Social Connection</span>
                         <span>25%</span>
                       </div>
-                      <Progress value={25} className="bg-blue-100" />
+                      <Progress value={25} className="bg-info" />
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-2">
                         <span>Nutrition</span>
                         <span>0%</span>
                       </div>
-                      <Progress value={0} className="bg-orange-100" />
+                      <Progress value={0} className="bg-warning/10" />
                     </div>
                   </div>
                 </CardContent>

@@ -89,7 +89,7 @@ export const DashboardGrid: React.FC = () => {
     <div className="p-6">
       {/* Edit Mode Toggle */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+        <h1 className="text-3xl font-bold text-foreground">
           Dashboard
         </h1>
         <Button
@@ -114,9 +114,9 @@ export const DashboardGrid: React.FC = () => {
 
       {/* Edit Mode Notice */}
       {isEditMode && (
-        <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <p className="text-sm text-blue-800 dark:text-blue-200">
-            Drag and drop widgets to rearrange your dashboard. Click "Save Layout" when finished.
+        <div className="mb-4 p-3 bg-muted/50 border border-border rounded-lg">
+          <p className="text-sm text-muted-foreground">
+            Drag and drop widgets to rearrange your dashboard. Click &quot;Save Layout&quot; when finished.
           </p>
         </div>
       )}
@@ -142,7 +142,7 @@ export const DashboardGrid: React.FC = () => {
                     ref={provided.innerRef}
                     {...provided.droppableProps}
                     className={`h-full transition-colors duration-200 ${
-                      snapshot.isDraggingOver && isEditMode ? 'bg-green-50/30 dark:bg-green-900/10 rounded-lg' : ''
+                      snapshot.isDraggingOver && isEditMode ? 'bg-success/10 rounded-lg' : ''
                     }`}
                   >
                     <Draggable
@@ -185,7 +185,7 @@ export const DashboardGrid: React.FC = () => {
 
       {/* Responsive Grid Guidelines (only in edit mode) */}
       {isEditMode && (
-        <div className="mt-4 text-xs text-gray-500 dark:text-gray-400">
+        <div className="mt-4 text-xs text-muted-foreground">
           <p>Grid: 12 columns • Gap: {GRID_GAP}px • Min height: {WIDGET_MIN_HEIGHT}px per row</p>
         </div>
       )}

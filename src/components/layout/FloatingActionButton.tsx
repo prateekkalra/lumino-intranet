@@ -38,7 +38,7 @@ export function FloatingActionButton() {
       id: 'quick-note',
       label: 'Quick Note',
       icon: StickyNote,
-      color: 'bg-blue-500 hover:bg-blue-600',
+      color: 'bg-primary hover:bg-primary/90',
       onClick: () => {
         openDialog('quick-note')
         toast({
@@ -52,7 +52,7 @@ export function FloatingActionButton() {
       id: 'new-post',
       label: 'New Post',
       icon: MessageSquarePlus,
-      color: 'bg-green-500 hover:bg-green-600',
+      color: 'bg-secondary hover:bg-secondary/90',
       onClick: () => {
         openDialog('team-feed')
         setIsExpanded(false)
@@ -62,7 +62,7 @@ export function FloatingActionButton() {
       id: 'help-support',
       label: 'Help & Support',
       icon: HelpCircle,
-      color: 'bg-purple-500 hover:bg-purple-600',
+      color: 'bg-accent hover:bg-accent/90',
       onClick: () => {
         openDialog('service-desk')
         setIsExpanded(false)
@@ -111,8 +111,8 @@ export function FloatingActionButton() {
               size="lg"
               className={`h-16 w-16 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-3xl ${
                 isExpanded 
-                  ? 'bg-red-500 hover:bg-red-600 rotate-45' 
-                  : 'bg-gradient-to-r from-primary via-blue-600 to-orange-600 hover:from-primary/90 hover:via-blue-600/90 hover:to-orange-600/90'
+                  ? 'bg-destructive hover:bg-destructive/90 rotate-45' 
+                  : 'bg-gradient-to-r from-primary via-primary to-accent hover:from-primary/90 hover:via-primary/90 hover:to-accent/90'
               } text-white border-0 group`}
               onClick={() => setIsExpanded(!isExpanded)}
             >

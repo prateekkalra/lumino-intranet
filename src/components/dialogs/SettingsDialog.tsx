@@ -47,7 +47,7 @@ export function SettingsDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => closeDialog('settings')}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Settings className="h-5 w-5" />
@@ -308,7 +308,7 @@ export function SettingsDialog() {
             <TabsContent value="about" className="space-y-6">
               <div className="space-y-6">
                 <div className="text-center space-y-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary via-blue-600 to-orange-600 mx-auto">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-gradient-to-br from-primary via-secondary to-accent mx-auto">
                     <span className="text-2xl font-bold text-white">L</span>
                   </div>
                   <div>

@@ -35,33 +35,33 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
 
   return (
     <div className="h-full">
-      <Card className={`h-full flex flex-col bg-white dark:bg-gray-800 border transition-all duration-200 ${
+      <Card className={`h-full flex flex-col bg-card border transition-all duration-200 ${
         isDragging 
-          ? 'shadow-2xl border-blue-400 ring-4 ring-blue-400/30 bg-blue-50/20 dark:bg-blue-900/20' 
-          : 'shadow-sm hover:shadow-md border-gray-200 dark:border-gray-700'
-      } ${isEditMode && !isDragging ? 'ring-1 ring-blue-300/50 hover:ring-2 hover:ring-blue-400/50' : ''}`}>
+          ? 'shadow-2xl border-primary ring-4 ring-primary/30 bg-primary/5' 
+          : 'shadow-sm hover:shadow-md border-border'
+      } ${isEditMode && !isDragging ? 'ring-1 ring-primary/50 hover:ring-2 hover:ring-primary/50' : ''}`}>
         
         {/* Widget Header */}
-        <div className={`flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-gray-700 transition-colors duration-200 ${
+        <div className={`flex items-center justify-between px-4 py-2.5 border-b border-border transition-colors duration-200 ${
           isDragging 
-            ? 'bg-blue-50/70 dark:bg-blue-900/30' 
-            : 'bg-gray-50/50 dark:bg-gray-900/50'
+            ? 'bg-primary/10' 
+            : 'bg-muted/50'
         }`}>
           <div className="flex items-center gap-2">
             {isDraggable && dragHandleProps && (
               <div
                 {...dragHandleProps}
-                className={`cursor-grab active:cursor-grabbing p-2 rounded transition-all duration-150 hover:bg-gray-100 dark:hover:bg-gray-700 ${
-                  isDragging ? 'bg-blue-100 dark:bg-blue-900 scale-110' : ''
+                className={`cursor-grab active:cursor-grabbing p-2 rounded transition-all duration-150 hover:bg-muted ${
+                  isDragging ? 'bg-primary/20 scale-110' : ''
                 }`}
                 title="Drag to move widget"
               >
                 <GripVertical className={`h-4 w-4 transition-colors duration-150 ${
-                  isDragging ? 'text-blue-600' : 'text-gray-400'
+                  isDragging ? 'text-primary' : 'text-muted-foreground'
                 }`} />
               </div>
             )}
-            <h3 className="font-semibold text-gray-900 dark:text-white text-sm">
+            <h3 className="font-semibold text-foreground text-sm">
               {widget.title}
             </h3>
           </div>
@@ -73,19 +73,19 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
                 size="sm"
                 variant="ghost"
                 onClick={handleToggleVisibility}
-                className="h-6 w-6 p-0 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="h-6 w-6 p-0 hover:bg-muted"
               >
                 {widget.isVisible ? (
-                  <Eye className="h-3 w-3 text-gray-500" />
+                  <Eye className="h-3 w-3 text-muted-foreground" />
                 ) : (
-                  <EyeOff className="h-3 w-3 text-gray-500" />
+                  <EyeOff className="h-3 w-3 text-muted-foreground" />
                 )}
               </Button>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={handleRemoveWidget}
-                className="h-6 w-6 p-0 hover:bg-red-100 dark:hover:bg-red-900/20 text-red-500"
+                className="h-6 w-6 p-0 hover:bg-destructive/10 text-destructive"
               >
                 <X className="h-3 w-3" />
               </Button>
@@ -98,7 +98,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
           {widget.isVisible ? (
             <div className="h-full">{children}</div>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-400 dark:text-gray-600">
+            <div className="flex items-center justify-center h-full text-muted-foreground">
               <div className="text-center">
                 <EyeOff className="h-8 w-8 mx-auto mb-2" />
                 <p className="text-sm">Widget hidden</p>
@@ -108,8 +108,8 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
           
           {/* Dragging Indicator */}
           {isDragging && (
-            <div className="absolute inset-0 bg-blue-400/10 backdrop-blur-sm flex items-center justify-center rounded-lg border-2 border-dashed border-blue-400">
-              <div className="text-center text-blue-700 dark:text-blue-300">
+            <div className="absolute inset-0 bg-primary/10 backdrop-blur-sm flex items-center justify-center rounded-lg border-2 border-dashed border-primary">
+              <div className="text-center text-primary">
                 <div className="text-2xl font-bold mb-1">✋</div>
                 <p className="text-sm font-semibold">Moving widget...</p>
               </div>
@@ -120,7 +120,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
         {/* Resize Handle (if resizable and in edit mode) */}
         {isEditMode && widget.isResizable && !isDragging && (
           <div className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize opacity-60 hover:opacity-100 transition-opacity">
-            <div className="absolute bottom-1 right-1 w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full" />
+            <div className="absolute bottom-1 right-1 w-2 h-2 bg-muted-foreground rounded-full" />
           </div>
         )}
       </Card>

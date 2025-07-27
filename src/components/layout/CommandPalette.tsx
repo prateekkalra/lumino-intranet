@@ -313,8 +313,8 @@ export function CommandPalette() {
                 onSelect={command.action}
                 className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/50"
               >
-                <div className="p-1.5 rounded-md bg-blue-100 dark:bg-blue-900/30">
-                  <Icon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <div className="p-1.5 rounded-md bg-info dark:bg-info/30">
+                  <Icon className="h-4 w-4 text-info-foreground dark:text-info-foreground" />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium">{command.title}</div>
@@ -346,8 +346,8 @@ export function CommandPalette() {
                 className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/50"
                 keywords={command.keywords}
               >
-                <div className="p-1.5 rounded-md bg-green-100 dark:bg-green-900/30">
-                  <Icon className="h-4 w-4 text-green-600 dark:text-green-400" />
+                <div className="p-1.5 rounded-md bg-success/10">
+                  <Icon className="h-4 w-4 text-success-foreground" />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium">{command.title}</div>
@@ -374,8 +374,8 @@ export function CommandPalette() {
                 className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-muted/50"
                 keywords={command.keywords}
               >
-                <div className="p-1.5 rounded-md bg-purple-100 dark:bg-purple-900/30">
-                  <Icon className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                <div className="p-1.5 rounded-md bg-secondary/50">
+                  <Icon className="h-4 w-4 text-secondary-foreground" />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium">{command.title}</div>

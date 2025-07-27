@@ -42,11 +42,11 @@ interface Note {
 }
 
 const defaultCategories = [
-  { value: 'personal', label: 'Personal', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
-  { value: 'work', label: 'Work', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' },
-  { value: 'meeting', label: 'Meeting', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' },
-  { value: 'idea', label: 'Idea', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' },
-  { value: 'todo', label: 'To Do', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' }
+  { value: 'personal', label: 'Personal', color: 'bg-info text-info-foreground dark:bg-info/30 dark:text-info-foreground' },
+  { value: 'work', label: 'Work', color: 'bg-secondary/10 text-secondary-foreground' },
+  { value: 'meeting', label: 'Meeting', color: 'bg-primary/10 text-primary' },
+  { value: 'idea', label: 'Idea', color: 'bg-accent/10 text-accent-foreground' },
+  { value: 'todo', label: 'To Do', color: 'bg-destructive/10 text-destructive' }
 ]
 
 const STORAGE_KEY = 'office-intranet-quick-notes'
@@ -206,12 +206,12 @@ export function QuickNoteDialog() {
       open={isDialogOpen('quick-note')} 
       onOpenChange={(open) => !open && closeDialog('quick-note')}
     >
-      <DialogContent className="max-w-6xl max-h-[90vh] w-full h-[90vh] p-0 flex flex-col">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader className="p-6 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-800">
-                <StickyNote className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+              <div className="p-2 rounded-lg bg-warning/10 border border-warning/30">
+                <StickyNote className="h-5 w-5 text-warning-foreground" />
               </div>
               <div>
                 <DialogTitle className="text-xl">Quick Notes</DialogTitle>

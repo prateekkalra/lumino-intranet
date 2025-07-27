@@ -41,6 +41,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useDialog } from "@/contexts/DialogContext"
 
 interface SystemNotification {
@@ -195,15 +196,15 @@ export function AlertsDialog() {
   const getTypeColor = (type: SystemNotification['type']) => {
     switch (type) {
       case 'security':
-        return 'text-red-600 bg-red-100 dark:bg-red-900/30 dark:text-red-400'
+        return 'text-destructive bg-destructive/10'
       case 'maintenance':
-        return 'text-orange-600 bg-orange-100 dark:bg-orange-900/30 dark:text-orange-400'
+        return 'text-warning-foreground bg-warning/10'
       case 'system':
-        return 'text-blue-600 bg-blue-100 dark:bg-blue-900/30 dark:text-blue-400'
+        return 'text-info-foreground bg-info/10'
       case 'info':
-        return 'text-green-600 bg-green-100 dark:bg-green-900/30 dark:text-green-400'
+        return 'text-success-foreground bg-success/10'
       default:
-        return 'text-gray-600 bg-gray-100 dark:bg-gray-900/30 dark:text-gray-400'
+        return 'text-muted-foreground bg-muted/50'
     }
   }
 
@@ -308,19 +309,23 @@ export function AlertsDialog() {
       open={isDialogOpen('alerts')} 
       onOpenChange={(open) => !open && closeDialog('alerts')}
     >
-      <DialogContent className="max-w-6xl max-h-[90vh] w-full h-[90vh] p-0 flex flex-col">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader className="p-6 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-              <Bell className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <DialogTitle className="text-xl">System Alerts & Notifications</DialogTitle>
-              <DialogDescription>
-                Manage all system notifications, security alerts, and important updates
-              </DialogDescription>
-            </div>
-          </div>
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Card className="p-2">
+                  <Bell className="h-5 w-5 text-primary" />
+                </Card>
+                <div>
+                  <DialogTitle className="text-xl">System Alerts & Notifications</DialogTitle>
+                  <DialogDescription>
+                    Manage all system notifications, security alerts, and important updates
+                  </DialogDescription>
+                </div>
+              </div>
+            </CardHeader>
+          </Card>
         </DialogHeader>
 
         <div className="flex-1 overflow-hidden">
@@ -340,179 +345,189 @@ export function AlertsDialog() {
             <TabsContent value={selectedTab} className="flex-1 overflow-auto m-0">
               <div className="px-6 space-y-6 pb-6">
                 {/* Search and Controls */}
-                <div className="flex items-center justify-between gap-4 flex-shrink-0">
-                  <div className="flex items-center gap-2 flex-1">
-                    <div className="relative flex-1 max-w-md">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search notifications..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9"
-                      />
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                    >
-                      {sortOrder === 'asc' ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
-                    </Button>
-                  </div>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between gap-4 flex-shrink-0">
+                      <div className="flex items-center gap-2 flex-1">
+                        <Card className="relative flex-1 max-w-md">
+                          <CardContent className="p-0">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              placeholder="Search notifications..."
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                              className="pl-9"
+                            />
+                          </CardContent>
+                        </Card>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                        >
+                          {sortOrder === 'asc' ? <SortAsc className="h-4 w-4" /> : <SortDesc className="h-4 w-4" />}
+                        </Button>
+                      </div>
 
-                  {selectedNotifications.length > 0 && (
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-muted-foreground">
-                        {selectedNotifications.length} selected
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleMarkAsRead(selectedNotifications)}
-                      >
-                        <CheckCircle className="h-4 w-4 mr-1" />
-                        Mark Read
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleMarkAsUnread(selectedNotifications)}
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        Mark Unread
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleArchive(selectedNotifications)}
-                      >
-                        <Archive className="h-4 w-4 mr-1" />
-                        Archive
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDelete(selectedNotifications)}
-                      >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Delete
-                      </Button>
+                      {selectedNotifications.length > 0 && (
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-muted-foreground">
+                            {selectedNotifications.length} selected
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleMarkAsRead(selectedNotifications)}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            Mark Read
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleMarkAsUnread(selectedNotifications)}
+                          >
+                            <Eye className="h-4 w-4 mr-1" />
+                            Mark Unread
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleArchive(selectedNotifications)}
+                          >
+                            <Archive className="h-4 w-4 mr-1" />
+                            Archive
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDelete(selectedNotifications)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-1" />
+                            Delete
+                          </Button>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </CardContent>
+                </Card>
 
                 {/* Notifications Table */}
-                <div className="border rounded-lg overflow-hidden flex-1">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-12">
-                          <input
-                            type="checkbox"
-                            checked={selectedNotifications.length === filteredNotifications.length && filteredNotifications.length > 0}
-                            onChange={handleSelectAll}
-                            className="rounded"
-                          />
-                        </TableHead>
-                        <TableHead className="w-12"></TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Priority</TableHead>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Time</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {filteredNotifications.map((notification) => {
-                        const Icon = getNotificationIcon(notification.type)
-                        const isSelected = selectedNotifications.includes(notification.id)
-                        
-                        return (
-                          <TableRow 
-                            key={notification.id}
-                            className={`cursor-pointer ${!notification.isRead ? 'bg-primary/5' : ''} ${isSelected ? 'bg-muted/50' : ''}`}
-                            onClick={() => {
-                              if (isSelected) {
-                                setSelectedNotifications(prev => prev.filter(id => id !== notification.id))
-                              } else {
-                                setSelectedNotifications(prev => [...prev, notification.id])
-                              }
-                            }}
-                          >
-                            <TableCell>
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={() => {}}
-                                className="rounded"
-                              />
-                            </TableCell>
-                            <TableCell>
-                              <div className={`p-2 rounded-lg ${getTypeColor(notification.type)}`}>
-                                <Icon className="h-4 w-4" />
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="space-y-1">
-                                <p className={`font-medium ${!notification.isRead ? 'font-semibold' : ''}`}>
-                                  {notification.title}
-                                </p>
-                                <p className="text-sm text-muted-foreground line-clamp-2">
-                                  {notification.message}
-                                </p>
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant="outline" className="capitalize">
-                                {notification.type}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <Badge variant={getPriorityColor(notification.priority)}>
-                                {notification.priority}
-                              </Badge>
-                            </TableCell>
-                            <TableCell>
-                              <span className="text-sm text-muted-foreground">
-                                {notification.category || 'General'}
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                                <Clock className="h-3 w-3" />
-                                {notification.timestamp}
-                              </div>
-                            </TableCell>
-                            <TableCell>
-                              <div className="flex items-center gap-2">
-                                {notification.isRead ? (
-                                  <EyeOff className="h-4 w-4 text-muted-foreground" />
-                                ) : (
-                                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                                )}
-                                {notification.actionRequired && (
-                                  <Badge variant="destructive" className="text-xs">
-                                    Action Required
-                                  </Badge>
-                                )}
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
+                <Card>
+                  <CardContent className="p-0">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-12">
+                            <input
+                              type="checkbox"
+                              checked={selectedNotifications.length === filteredNotifications.length && filteredNotifications.length > 0}
+                              onChange={handleSelectAll}
+                              className="rounded"
+                            />
+                          </TableHead>
+                          <TableHead className="w-12"></TableHead>
+                          <TableHead>Title</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Priority</TableHead>
+                          <TableHead>Category</TableHead>
+                          <TableHead>Time</TableHead>
+                          <TableHead>Status</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredNotifications.map((notification) => {
+                          const Icon = getNotificationIcon(notification.type)
+                          const isSelected = selectedNotifications.includes(notification.id)
+                          
+                          return (
+                            <TableRow 
+                              key={notification.id}
+                              className={`cursor-pointer ${!notification.isRead ? 'bg-primary/5' : ''} ${isSelected ? 'bg-muted/50' : ''}`}
+                              onClick={() => {
+                                if (isSelected) {
+                                  setSelectedNotifications(prev => prev.filter(id => id !== notification.id))
+                                } else {
+                                  setSelectedNotifications(prev => [...prev, notification.id])
+                                }
+                              }}
+                            >
+                              <TableCell>
+                                <input
+                                  type="checkbox"
+                                  checked={isSelected}
+                                  onChange={() => {}}
+                                  className="rounded"
+                                />
+                              </TableCell>
+                              <TableCell>
+                                <Card className={`p-2 ${getTypeColor(notification.type)}`}>
+                                  <Icon className="h-4 w-4" />
+                                </Card>
+                              </TableCell>
+                              <TableCell>
+                                <div className="space-y-1">
+                                  <CardTitle className={`text-base ${!notification.isRead ? 'font-semibold' : ''}`}>
+                                    {notification.title}
+                                  </CardTitle>
+                                  <CardDescription className="line-clamp-2">
+                                    {notification.message}
+                                  </CardDescription>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="outline" className="capitalize">
+                                  {notification.type}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant={getPriorityColor(notification.priority)}>
+                                  {notification.priority}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <span className="text-sm text-muted-foreground">
+                                  {notification.category || 'General'}
+                                </span>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                  <Clock className="h-3 w-3" />
+                                  {notification.timestamp}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex items-center gap-2">
+                                  {notification.isRead ? (
+                                    <EyeOff className="h-4 w-4 text-muted-foreground" />
+                                  ) : (
+                                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                                  )}
+                                  {notification.actionRequired && (
+                                    <Badge variant="destructive" className="text-xs">
+                                      Action Required
+                                    </Badge>
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )
+                        })}
+                      </TableBody>
                     </Table>
-                </div>
+                  </CardContent>
+                </Card>
 
                 {filteredNotifications.length === 0 && (
-                  <div className="text-center py-12">
-                    <Bell className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-lg font-medium">No notifications found</p>
-                    <p className="text-muted-foreground">
-                      {searchQuery ? 'Try adjusting your search terms' : 'All caught up! No new alerts.'}
-                    </p>
-                  </div>
+                  <Card>
+                    <CardContent className="flex flex-col items-center justify-center py-12">
+                      <Bell className="h-12 w-12 text-muted-foreground mb-4" />
+                      <CardTitle className="text-lg mb-2">No notifications found</CardTitle>
+                      <CardDescription>
+                        {searchQuery ? 'Try adjusting your search terms' : 'All caught up! No new alerts.'}
+                      </CardDescription>
+                    </CardContent>
+                  </Card>
                 )}
               </div>
             </TabsContent>
@@ -520,19 +535,21 @@ export function AlertsDialog() {
         </div>
 
         <div className="p-6 pt-4 border-t">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              Showing {filteredNotifications.length} of {notifications.length} notifications
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => closeDialog('alerts')}>
-                Close
-              </Button>
-              <Button onClick={() => handleMarkAsRead(filteredNotifications.map(n => n.id))}>
-                Mark All as Read
-              </Button>
-            </div>
-          </div>
+          <Card>
+            <CardContent className="flex items-center justify-between p-4">
+              <div className="text-sm text-muted-foreground">
+                Showing {filteredNotifications.length} of {notifications.length} notifications
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => closeDialog('alerts')}>
+                  Close
+                </Button>
+                <Button onClick={() => handleMarkAsRead(filteredNotifications.map(n => n.id))}>
+                  Mark All as Read
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </DialogContent>
     </Dialog>

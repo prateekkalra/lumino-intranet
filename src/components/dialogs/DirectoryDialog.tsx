@@ -11,7 +11,8 @@ import {
   Calendar,
   MessageCircle,
   Star,
-  User
+  User,
+  ArrowLeft
 } from "lucide-react"
 
 import {
@@ -39,6 +40,21 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { useDialog } from "@/contexts/DialogContext"
 
 interface Employee {
@@ -197,15 +213,15 @@ export function DirectoryDialog() {
   const getStatusColor = (status: Employee['status']) => {
     switch (status) {
       case 'online':
-        return 'bg-green-500'
+        return 'bg-success'
       case 'away':
-        return 'bg-yellow-500'
+        return 'bg-warning'
       case 'busy':
-        return 'bg-red-500'
+        return 'bg-destructive'
       case 'offline':
-        return 'bg-gray-400'
+        return 'bg-muted-foreground'
       default:
-        return 'bg-gray-400'
+        return 'bg-muted-foreground'
     }
   }
 
@@ -245,148 +261,162 @@ export function DirectoryDialog() {
   }, [employees, selectedDepartment, searchQuery])
 
   const EmployeeCard = ({ employee }: { employee: Employee }) => (
-    <div 
-      className="p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer hover:bg-muted/50"
+    <Card 
+      className="hover:shadow-md transition-all cursor-pointer hover:bg-muted/50"
       onClick={() => setSelectedEmployee(employee)}
     >
-      <div className="flex items-start gap-4">
-        <div className="relative">
-          <Avatar className="h-12 w-12">
-            <AvatarImage src={employee.avatar} alt={employee.name} />
-            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-blue-500/20">
-              {employee.name.split(' ').map(n => n[0]).join('')}
-            </AvatarFallback>
-          </Avatar>
-          <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background ${getStatusColor(employee.status)}`} />
-        </div>
-        
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <h3 className="font-semibold truncate">{employee.name}</h3>
-            <Badge variant="outline" className="text-xs">
-              {employee.department}
-            </Badge>
+      <CardContent className="p-4">
+        <div className="flex items-start gap-4">
+          <div className="relative">
+            <Avatar className="h-12 w-12">
+              <AvatarImage src={employee.avatar} alt={employee.name} />
+              <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20">
+                {employee.name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
+            </Avatar>
+            <div className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-background ${getStatusColor(employee.status)}`} />
           </div>
           
-          <p className="text-sm text-muted-foreground mb-2 truncate">{employee.position}</p>
-          
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
-              <span>{employee.location}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className={`w-2 h-2 rounded-full ${getStatusColor(employee.status)}`} />
-              <span>{getStatusText(employee.status)}</span>
-            </div>
-          </div>
-          
-          <div className="flex flex-wrap gap-1 mt-2">
-            {employee.skills.slice(0, 3).map((skill, index) => (
-              <Badge key={index} variant="secondary" className="text-xs">
-                {skill}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2 mb-1">
+              <CardTitle className="text-base font-semibold truncate">{employee.name}</CardTitle>
+              <Badge variant="outline" className="text-xs">
+                {employee.department}
               </Badge>
-            ))}
-            {employee.skills.length > 3 && (
-              <Badge variant="secondary" className="text-xs">
-                +{employee.skills.length - 3} more
-              </Badge>
-            )}
+            </div>
+            
+            <CardDescription className="text-sm mb-2 truncate">{employee.position}</CardDescription>
+            
+            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+              <div className="flex items-center gap-1">
+                <MapPin className="h-3 w-3" />
+                <span>{employee.location}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <div className={`w-2 h-2 rounded-full ${getStatusColor(employee.status)}`} />
+                <span>{getStatusText(employee.status)}</span>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-1 mt-2">
+              {employee.skills.slice(0, 3).map((skill, index) => (
+                <Badge key={index} variant="secondary" className="text-xs">
+                  {skill}
+                </Badge>
+              ))}
+              {employee.skills.length > 3 && (
+                <Badge variant="secondary" className="text-xs">
+                  +{employee.skills.length - 3} more
+                </Badge>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 
   const EmployeeProfile = ({ employee }: { employee: Employee }) => (
-    <div className="space-y-8">
-      <div className="flex items-start gap-6">
-        <div className="relative">
-          <Avatar className="h-24 w-24">
-            <AvatarImage src={employee.avatar} alt={employee.name} />
-            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-blue-500/20 text-2xl">
-              {employee.name.split(' ').map(n => n[0]).join('')}
-            </AvatarFallback>
-          </Avatar>
-          <div className={`absolute -bottom-2 -right-2 w-6 h-6 rounded-full border-4 border-background ${getStatusColor(employee.status)}`} />
-        </div>
-        
-        <div className="flex-1">
-          <h2 className="text-2xl font-bold mb-1">{employee.name}</h2>
-          <p className="text-lg text-muted-foreground mb-2">{employee.position}</p>
-          <div className="flex items-center gap-2 mb-4">
-            <Badge variant="outline">{employee.department}</Badge>
-            <Badge variant={employee.status === 'online' ? 'default' : 'secondary'}>
-              {getStatusText(employee.status)}
-            </Badge>
+    <Card>
+      <CardHeader>
+        <div className="flex items-start gap-6">
+          <div className="relative">
+            <Avatar className="h-24 w-24">
+              <AvatarImage src={employee.avatar} alt={employee.name} />
+              <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20 text-2xl">
+                {employee.name.split(' ').map(n => n[0]).join('')}
+              </AvatarFallback>
+            </Avatar>
+            <div className={`absolute -bottom-2 -right-2 w-6 h-6 rounded-full border-4 border-background ${getStatusColor(employee.status)}`} />
           </div>
           
-          <p className="text-muted-foreground leading-relaxed">{employee.bio}</p>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <div className="space-y-4">
-          <h3 className="font-semibold">Contact Information</h3>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <Mail className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{employee.email}</span>
+          <div className="flex-1">
+            <CardTitle className="text-2xl mb-1">{employee.name}</CardTitle>
+            <CardDescription className="text-lg mb-2">{employee.position}</CardDescription>
+            <div className="flex items-center gap-2 mb-4">
+              <Badge variant="outline">{employee.department}</Badge>
+              <Badge variant={employee.status === 'online' ? 'default' : 'secondary'}>
+                {getStatusText(employee.status)}
+              </Badge>
             </div>
-            <div className="flex items-center gap-3">
-              <Phone className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{employee.phone}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{employee.location}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Building className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{employee.department}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">Started {employee.startDate}</span>
-            </div>
+            
+            <CardDescription className="leading-relaxed">{employee.bio}</CardDescription>
           </div>
         </div>
-
-        <div className="space-y-4">
-          <h3 className="font-semibold">Organization</h3>
-          <div className="space-y-3">
-            {employee.manager && (
+      </CardHeader>
+      
+      <CardContent className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Contact Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
               <div className="flex items-center gap-3">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">Reports to {employee.manager}</span>
+                <Mail className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{employee.email}</span>
               </div>
-            )}
-            {employee.reports.length > 0 && (
-              <div>
-                <p className="text-sm text-muted-foreground mb-2">Direct Reports:</p>
-                <div className="space-y-1">
-                  {employee.reports.map((report, index) => (
-                    <div key={index} className="text-sm pl-7">• {report}</div>
-                  ))}
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{employee.phone}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <MapPin className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{employee.location}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Building className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{employee.department}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">Started {employee.startDate}</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Organization</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {employee.manager && (
+                <div className="flex items-center gap-3">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">Reports to {employee.manager}</span>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+              {employee.reports.length > 0 && (
+                <div>
+                  <p className="text-sm text-muted-foreground mb-2">Direct Reports:</p>
+                  <div className="space-y-1">
+                    {employee.reports.map((report, index) => (
+                      <div key={index} className="text-sm pl-7">• {report}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
-      </div>
 
-      <div className="space-y-4">
-        <h3 className="font-semibold">Skills & Expertise</h3>
-        <div className="flex flex-wrap gap-2">
-          {employee.skills.map((skill, index) => (
-            <Badge key={index} variant="secondary">
-              {skill}
-            </Badge>
-          ))}
-        </div>
-      </div>
-
-      <div className="flex gap-3">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Skills & Expertise</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {employee.skills.map((skill, index) => (
+                <Badge key={index} variant="secondary">
+                  {skill}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </CardContent>
+      
+      <CardFooter className="flex gap-3">
         <Button>
           <MessageCircle className="h-4 w-4 mr-2" />
           Send Message
@@ -399,8 +429,20 @@ export function DirectoryDialog() {
           <Star className="h-4 w-4 mr-2" />
           Add to Favorites
         </Button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
+  )
+
+  const EmptyState = () => (
+    <Card>
+      <CardContent className="flex flex-col items-center justify-center py-12">
+        <Users className="h-12 w-12 text-muted-foreground mb-4" />
+        <CardTitle className="text-lg mb-2">No employees found</CardTitle>
+        <CardDescription>
+          Try adjusting your search terms or filters
+        </CardDescription>
+      </CardContent>
+    </Card>
   )
 
   return (
@@ -408,7 +450,7 @@ export function DirectoryDialog() {
       open={isDialogOpen('directory')} 
       onOpenChange={(open) => !open && closeDialog('directory')}
     >
-      <DialogContent className="max-w-7xl max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader className="p-6 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -425,6 +467,7 @@ export function DirectoryDialog() {
             
             {selectedEmployee && (
               <Button variant="outline" onClick={() => setSelectedEmployee(null)}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Directory
               </Button>
             )}
@@ -433,7 +476,7 @@ export function DirectoryDialog() {
 
         <div className="flex-1 overflow-hidden">
           {selectedEmployee ? (
-            <div className="p-10 overflow-auto flex-1">
+            <div className="p-8 overflow-auto flex-1">
               <EmployeeProfile employee={selectedEmployee} />
             </div>
           ) : (
@@ -448,90 +491,96 @@ export function DirectoryDialog() {
               <TabsContent value="grid" className="flex-1 overflow-auto m-0">
                 <div className="px-8 space-y-8 pb-8">
                   {/* Search and Filters */}
-                  <div className="flex items-center gap-4 flex-shrink-0">
-                    <div className="relative flex-1">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        placeholder="Search employees by name, position, skills..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-9"
-                      />
-                    </div>
-                    
-                    <select
-                      value={selectedDepartment}
-                      onChange={(e) => setSelectedDepartment(e.target.value)}
-                      className="px-3 py-2 border rounded-md text-sm bg-background"
-                    >
-                      <option value="all">All Departments</option>
-                      {departments.map(dept => (
-                        <option key={dept} value={dept}>{dept}</option>
-                      ))}
-                    </select>
-                  </div>
+                  <Card>
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-4">
+                        <div className="relative flex-1">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            placeholder="Search employees by name, position, skills..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-9"
+                          />
+                        </div>
+                        
+                        <Select
+                          value={selectedDepartment}
+                          onValueChange={setSelectedDepartment}
+                        >
+                          <SelectTrigger className="w-[200px]">
+                            <SelectValue placeholder="All Departments" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Departments</SelectItem>
+                            {departments.map(dept => (
+                              <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </CardContent>
+                  </Card>
 
                   {/* Employee Grid */}
-                  <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-                    {filteredEmployees.map((employee) => (
-                      <EmployeeCard key={employee.id} employee={employee} />
-                    ))}
-                  </div>
-
-                  {filteredEmployees.length === 0 && (
-                    <div className="text-center py-12">
-                      <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-lg font-medium">No employees found</p>
-                      <p className="text-muted-foreground">
-                        Try adjusting your search terms or filters
-                      </p>
+                  {filteredEmployees.length > 0 ? (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+                      {filteredEmployees.map((employee) => (
+                        <EmployeeCard key={employee.id} employee={employee} />
+                      ))}
                     </div>
+                  ) : (
+                    <EmptyState />
                   )}
                 </div>
               </TabsContent>
 
               <TabsContent value="list" className="flex-1 overflow-auto m-0">
                 <div className="px-8 space-y-8 pb-8">
-                  <Command className="border rounded-lg">
-                    <CommandInput placeholder="Search employees..." />
-                    <CommandList>
-                      <CommandEmpty>No employees found.</CommandEmpty>
-                      <CommandGroup>
-                        {filteredEmployees.map((employee) => (
-                          <CommandItem
-                            key={employee.id}
-                            onSelect={() => setSelectedEmployee(employee)}
-                            className="flex items-center gap-4 p-4"
-                          >
-                            <div className="relative">
-                              <Avatar className="h-10 w-10">
-                                <AvatarImage src={employee.avatar} alt={employee.name} />
-                                <AvatarFallback>
-                                  {employee.name.split(' ').map(n => n[0]).join('')}
-                                </AvatarFallback>
-                              </Avatar>
-                              <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(employee.status)}`} />
-                            </div>
-                            
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between">
-                                <p className="font-medium truncate">{employee.name}</p>
-                                <Badge variant="outline" className="text-xs">
-                                  {employee.department}
-                                </Badge>
-                              </div>
-                              <p className="text-sm text-muted-foreground truncate">
-                                {employee.position}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {employee.location} • {getStatusText(employee.status)}
-                              </p>
-                            </div>
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
+                  <Card>
+                    <CardContent className="p-4">
+                      <Command className="border rounded-lg">
+                        <CommandInput placeholder="Search employees..." />
+                        <CommandList>
+                          <CommandEmpty>No employees found.</CommandEmpty>
+                          <CommandGroup>
+                            {filteredEmployees.map((employee) => (
+                              <CommandItem
+                                key={employee.id}
+                                onSelect={() => setSelectedEmployee(employee)}
+                                className="flex items-center gap-4 p-4"
+                              >
+                                <div className="relative">
+                                  <Avatar className="h-10 w-10">
+                                    <AvatarImage src={employee.avatar} alt={employee.name} />
+                                    <AvatarFallback>
+                                      {employee.name.split(' ').map(n => n[0]).join('')}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                  <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-background ${getStatusColor(employee.status)}`} />
+                                </div>
+                                
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between">
+                                    <p className="font-medium truncate">{employee.name}</p>
+                                    <Badge variant="outline" className="text-xs">
+                                      {employee.department}
+                                    </Badge>
+                                  </div>
+                                  <p className="text-sm text-muted-foreground truncate">
+                                    {employee.position}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {employee.location} • {getStatusText(employee.status)}
+                                  </p>
+                                </div>
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </CardContent>
+                  </Card>
                 </div>
               </TabsContent>
             </Tabs>

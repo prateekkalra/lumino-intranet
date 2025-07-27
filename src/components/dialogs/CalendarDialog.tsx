@@ -36,6 +36,8 @@ import {
 } from "@/components/ui/tabs"
 import { useDialog } from "@/contexts/DialogContext"
 import { useToast } from "@/components/ui/use-toast"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface CalendarEvent {
   id: string
@@ -237,23 +239,6 @@ export function CalendarDialog() {
     });
   };
 
-  const getEventColor = (color: string) => {
-    switch (color) {
-      case 'blue':
-        return 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400'
-      case 'red':
-        return 'bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-400'
-      case 'green':
-        return 'bg-green-100 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-400'
-      case 'purple':
-        return 'bg-purple-100 text-purple-700 border-purple-200 dark:bg-purple-900/30 dark:text-purple-400'
-      case 'orange':
-        return 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400'
-      default:
-        return 'bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-900/30 dark:text-gray-400'
-    }
-  }
-
   const getPriorityColor = (priority: CalendarEvent['priority']) => {
     switch (priority) {
       case 'high':
@@ -296,72 +281,77 @@ export function CalendarDialog() {
   }, [events, searchQuery])
 
   const EventCard = ({ event }: { event: CalendarEvent }) => (
-    <div 
-      className={`p-3 rounded-lg border transition-all duration-200 hover:shadow-md cursor-pointer ${getEventColor(event.color)}`}
+    <Card 
+      className="transition-all duration-200 hover:shadow-md cursor-pointer"
       onClick={() => handleEventClick(event)}
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
-        <h4 className="font-semibold text-sm truncate">{event.title}</h4>
-        <div className="flex items-center gap-1 shrink-0">
-          <Badge variant={getPriorityColor(event.priority)} className="text-xs">
-            {event.priority}
-          </Badge>
-          {event.isRecurring && (
-            <Repeat className="h-3 w-3 opacity-70" />
+      <CardHeader className="pb-3">
+        <div className="flex items-start justify-between gap-2">
+          <CardTitle className="text-sm font-semibold">{event.title}</CardTitle>
+          <div className="flex items-center gap-1 shrink-0">
+            <Badge variant={getPriorityColor(event.priority)} className="text-xs">
+              {event.priority}
+            </Badge>
+            {event.isRecurring && (
+              <Repeat className="h-3 w-3 opacity-70" />
+            )}
+          </div>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="pb-3">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <Clock className="h-3 w-3" />
+            <span>{event.startTime} - {event.endTime}</span>
+          </div>
+          
+          {event.location && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <MapPin className="h-3 w-3" />
+              <span className="truncate">{event.location}</span>
+            </div>
+          )}
+          
+          {event.isOnline && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Video className="h-3 w-3" />
+              <span>Online Meeting</span>
+            </div>
+          )}
+          
+          {event.attendees && event.attendees.length > 0 && (
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Users className="h-3 w-3" />
+              <span>{event.attendees.length} attendee{event.attendees.length !== 1 ? 's' : ''}</span>
+            </div>
           )}
         </div>
-      </div>
+      </CardContent>
       
-      <div className="space-y-1">
-        <div className="flex items-center gap-2 text-xs">
-          <Clock className="h-3 w-3 opacity-70" />
-          <span>{event.startTime} - {event.endTime}</span>
+      <CardFooter>
+        <div className="flex items-center justify-end gap-1 w-full">
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={(e) => handleEditEvent(event, e)}
+            className="h-6 px-2 text-xs"
+          >
+            <Edit className="h-3 w-3 mr-1" />
+            Edit
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={(e) => handleDeleteEvent(event.id, e)}
+            className="h-6 px-2 text-xs"
+          >
+            <Trash2 className="h-3 w-3 mr-1" />
+            Delete
+          </Button>
         </div>
-        
-        {event.location && (
-          <div className="flex items-center gap-2 text-xs">
-            <MapPin className="h-3 w-3 opacity-70" />
-            <span className="truncate">{event.location}</span>
-          </div>
-        )}
-        
-        {event.isOnline && (
-          <div className="flex items-center gap-2 text-xs">
-            <Video className="h-3 w-3 opacity-70" />
-            <span>Online Meeting</span>
-          </div>
-        )}
-        
-        {event.attendees && event.attendees.length > 0 && (
-          <div className="flex items-center gap-2 text-xs">
-            <Users className="h-3 w-3 opacity-70" />
-            <span>{event.attendees.length} attendee{event.attendees.length !== 1 ? 's' : ''}</span>
-          </div>
-        )}
-      </div>
-      
-      {/* Action buttons */}
-      <div className="flex items-center justify-end gap-1 mt-2 pt-2 border-t border-current/20">
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={(e) => handleEditEvent(event, e)}
-          className="h-6 px-2 text-xs"
-        >
-          <Edit className="h-3 w-3 mr-1" />
-          Edit
-        </Button>
-        <Button
-          size="sm"
-          variant="ghost"
-          onClick={(e) => handleDeleteEvent(event.id, e)}
-          className="h-6 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
-        >
-          <Trash2 className="h-3 w-3 mr-1" />
-          Delete
-        </Button>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   )
 
   return (
@@ -369,37 +359,43 @@ export function CalendarDialog() {
       open={isDialogOpen('calendar')} 
       onOpenChange={(open) => !open && closeDialog('calendar')}
     >
-      <DialogContent className="max-w-7xl max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader className="p-6 pb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
-                <CalendarIcon className="h-5 w-5 text-primary" />
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Card className="p-2">
+                    <CalendarIcon className="h-5 w-5 text-primary" />
+                  </Card>
+                  <div>
+                    <DialogTitle className="text-xl">Calendar & Events</DialogTitle>
+                    <DialogDescription>
+                      Manage your events, meetings, and important dates
+                    </DialogDescription>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Card className="relative">
+                    <CardContent className="p-0">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search events..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="pl-9 w-64"
+                      />
+                    </CardContent>
+                  </Card>
+                  <Button size="sm" onClick={handleCreateEvent}>
+                    <Plus className="h-4 w-4 mr-1" />
+                    New Event
+                  </Button>
+                </div>
               </div>
-              <div>
-                <DialogTitle className="text-xl">Calendar & Events</DialogTitle>
-                <DialogDescription>
-                  Manage your events, meetings, and important dates
-                </DialogDescription>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search events..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 w-64"
-                />
-              </div>
-              <Button size="sm" onClick={handleCreateEvent}>
-                <Plus className="h-4 w-4 mr-1" />
-                New Event
-              </Button>
-            </div>
-          </div>
+            </CardHeader>
+          </Card>
         </DialogHeader>
 
         <div className="flex-1 overflow-hidden">
@@ -415,171 +411,201 @@ export function CalendarDialog() {
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 p-8">
                 {/* Calendar */}
                 <div className="xl:col-span-2 space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold">
-                      {currentMonth.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => setCurrentMonth(new Date())}
-                      >
-                        Today
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                  
-                  <div className="border rounded-lg p-6 bg-card">
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={setSelectedDate}
-                      month={currentMonth}
-                      onMonthChange={setCurrentMonth}
-                      className="w-full scale-110"
-                    />
-                  </div>
+                  <Card>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-lg">
+                          {currentMonth.toLocaleDateString('default', { month: 'long', year: 'numeric' })}
+                        </CardTitle>
+                        <div className="flex items-center gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
+                          >
+                            <ChevronLeft className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setCurrentMonth(new Date())}
+                          >
+                            Today
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
+                          >
+                            <ChevronRight className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        month={currentMonth}
+                        onMonthChange={setCurrentMonth}
+                        className="w-full"
+                      />
+                    </CardContent>
+                  </Card>
                 </div>
 
                 {/* Event Details Sidebar */}
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">
-                      {selectedDate ? `Events for ${selectedDate.toLocaleDateString()}` : 'Today\'s Events'}
-                    </h3>
-                    <div className="space-y-3">
-                      {(selectedDate ? getEventsForDate(selectedDate) : getTodayEvents()).map((event) => (
-                        <EventCard key={event.id} event={event} />
-                      ))}
-                      {(selectedDate ? getEventsForDate(selectedDate) : getTodayEvents()).length === 0 && (
-                        <div className="text-center py-8 text-muted-foreground">
-                          <CalendarIcon className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                          <p>No events scheduled</p>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>
+                        {selectedDate ? `Events for ${selectedDate.toLocaleDateString()}` : "Today's Events"}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ScrollArea className="h-[400px]">
+                        <div className="space-y-3">
+                          {(selectedDate ? getEventsForDate(selectedDate) : getTodayEvents()).map((event) => (
+                            <EventCard key={event.id} event={event} />
+                          ))}
+                          {(selectedDate ? getEventsForDate(selectedDate) : getTodayEvents()).length === 0 && (
+                            <Card>
+                              <CardContent className="text-center py-8">
+                                <CalendarIcon className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                                <p className="text-muted-foreground">No events scheduled</p>
+                              </CardContent>
+                            </Card>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
+                      </ScrollArea>
+                    </CardContent>
+                  </Card>
 
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Upcoming Events</h3>
-                    <div className="space-y-3">
-                      {getUpcomingEvents().slice(0, 5).map((event) => (
-                        <div key={event.id} className="p-2 rounded border text-sm">
-                          <div className="font-medium truncate">{event.title}</div>
-                          <div className="text-muted-foreground">
-                            {event.date.toLocaleDateString()} at {event.startTime}
-                          </div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Upcoming Events</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ScrollArea className="h-[200px]">
+                        <div className="space-y-3">
+                          {getUpcomingEvents().slice(0, 5).map((event) => (
+                            <Card key={event.id}>
+                              <CardContent className="p-3">
+                                <div className="font-medium text-sm truncate">{event.title}</div>
+                                <div className="text-muted-foreground text-xs">
+                                  {event.date.toLocaleDateString()} at {event.startTime}
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ))}
                         </div>
-                      ))}
-                    </div>
-                  </div>
+                      </ScrollArea>
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             </TabsContent>
 
             <TabsContent value="agenda" className="flex-1 overflow-auto m-0">
               <div className="p-8 space-y-8">
-                <div className="flex items-center justify-between flex-shrink-0">
-                  <h3 className="text-lg font-semibold">Event Agenda</h3>
-                  <div className="flex items-center gap-2">
-                    <Button variant="outline" size="sm">
-                      <Filter className="h-4 w-4 mr-1" />
-                      Filter
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-6">
-                  {filteredEvents.map((event) => (
-                    <div key={event.id} className="border rounded-lg p-4 hover:shadow-md transition-all">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h4 className="font-semibold">{event.title}</h4>
-                            <Badge variant="outline" className="capitalize">
-                              {event.type}
-                            </Badge>
-                            <Badge variant={getPriorityColor(event.priority)}>
-                              {event.priority}
-                            </Badge>
-                            {event.isRecurring && (
-                              <Badge variant="secondary">
-                                <Repeat className="h-3 w-3 mr-1" />
-                                {event.recurringPattern}
-                              </Badge>
-                            )}
-                          </div>
-                          
-                          {event.description && (
-                            <p className="text-muted-foreground mb-3">{event.description}</p>
-                          )}
-                          
-                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                            <div className="flex items-center gap-2">
-                              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                              <span>{event.date.toLocaleDateString()}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-muted-foreground" />
-                              <span>{event.startTime} - {event.endTime}</span>
-                            </div>
-                            {event.location && (
-                              <div className="flex items-center gap-2">
-                                <MapPin className="h-4 w-4 text-muted-foreground" />
-                                <span className="truncate">{event.location}</span>
-                              </div>
-                            )}
-                            {event.attendees && (
-                              <div className="flex items-center gap-2">
-                                <Users className="h-4 w-4 text-muted-foreground" />
-                                <span>{event.attendees.length} attendees</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-2">
-                          {event.isOnline && event.meetingLink && (
-                            <Button variant="outline" size="sm">
-                              <Video className="h-4 w-4 mr-1" />
-                              Join
-                            </Button>
-                          )}
-                          <Button variant="ghost" size="sm">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle>Event Agenda</CardTitle>
+                      <div className="flex items-center gap-2">
+                        <Button variant="outline" size="sm">
+                          <Filter className="h-4 w-4 mr-1" />
+                          Filter
+                        </Button>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[600px]">
+                      <div className="space-y-6">
+                        {filteredEvents.map((event) => (
+                          <Card key={event.id} className="hover:shadow-md transition-all">
+                            <CardContent className="p-4">
+                              <div className="flex items-start justify-between gap-4">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-3 mb-2">
+                                    <CardTitle className="text-base">{event.title}</CardTitle>
+                                    <Badge variant="outline" className="capitalize">
+                                      {event.type}
+                                    </Badge>
+                                    <Badge variant={getPriorityColor(event.priority)}>
+                                      {event.priority}
+                                    </Badge>
+                                    {event.isRecurring && (
+                                      <Badge variant="secondary">
+                                        <Repeat className="h-3 w-3 mr-1" />
+                                        {event.recurringPattern}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  
+                                  {event.description && (
+                                    <p className="text-muted-foreground mb-3 text-sm">{event.description}</p>
+                                  )}
+                                  
+                                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                                    <div className="flex items-center gap-2">
+                                      <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                                      <span>{event.date.toLocaleDateString()}</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <Clock className="h-4 w-4 text-muted-foreground" />
+                                      <span>{event.startTime} - {event.endTime}</span>
+                                    </div>
+                                    {event.location && (
+                                      <div className="flex items-center gap-2">
+                                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                                        <span className="truncate">{event.location}</span>
+                                      </div>
+                                    )}
+                                    {event.attendees && (
+                                      <div className="flex items-center gap-2">
+                                        <Users className="h-4 w-4 text-muted-foreground" />
+                                        <span>{event.attendees.length} attendees</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                
+                                <div className="flex items-center gap-2">
+                                  {event.isOnline && event.meetingLink && (
+                                    <Button variant="outline" size="sm">
+                                      <Video className="h-4 w-4 mr-1" />
+                                      Join
+                                    </Button>
+                                  )}
+                                  <Button variant="ghost" size="sm">
+                                    <Edit className="h-4 w-4" />
+                                  </Button>
+                                  <Button variant="ghost" size="sm">
+                                    <Trash2 className="h-4 w-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
 
                 {filteredEvents.length === 0 && (
-                  <div className="text-center py-12">
-                    <CalendarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-lg font-medium">No events found</p>
-                    <p className="text-muted-foreground">
-                      {searchQuery ? 'Try adjusting your search terms' : 'No events scheduled'}
-                    </p>
-                  </div>
+                  <Card>
+                    <CardContent className="text-center py-12">
+                      <CalendarIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-lg font-medium">No events found</p>
+                      <p className="text-muted-foreground">
+                        {searchQuery ? 'Try adjusting your search terms' : 'No events scheduled'}
+                      </p>
+                    </CardContent>
+                  </Card>
                 )}
               </div>
             </TabsContent>
@@ -587,20 +613,22 @@ export function CalendarDialog() {
         </div>
 
         <div className="p-6 pt-4 border-t">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
-              {filteredEvents.length} events found
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={() => closeDialog('calendar')}>
-                Close
-              </Button>
-              <Button>
-                <Plus className="h-4 w-4 mr-1" />
-                Create Event
-              </Button>
-            </div>
-          </div>
+          <Card>
+            <CardContent className="flex items-center justify-between p-4">
+              <div className="text-sm text-muted-foreground">
+                {filteredEvents.length} events found
+              </div>
+              <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={() => closeDialog('calendar')}>
+                  Close
+                </Button>
+                <Button>
+                  <Plus className="h-4 w-4 mr-1" />
+                  Create Event
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </DialogContent>
     </Dialog>

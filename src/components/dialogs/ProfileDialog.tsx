@@ -30,12 +30,18 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge as BadgeComponent } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardFooter, 
+  CardHeader, 
+  CardTitle 
+} from "@/components/ui/card"
 import { useDialog } from "@/contexts/DialogContext"
 import { useToast } from "@/components/ui/use-toast"
 
@@ -140,18 +146,18 @@ export function ProfileDialog() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'online': return 'bg-green-500'
-      case 'away': return 'bg-yellow-500'
-      case 'busy': return 'bg-red-500'
-      case 'offline': return 'bg-gray-500'
-      default: return 'bg-gray-500'
+      case 'online': return 'bg-primary'
+      case 'away': return 'bg-secondary'
+      case 'busy': return 'bg-destructive'
+      case 'offline': return 'bg-muted-foreground'
+      default: return 'bg-muted-foreground'
     }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={() => closeDialog('profile')}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
-        <DialogHeader>
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
+        <DialogHeader className="p-6 pb-4">
           <DialogTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
             My Profile
@@ -161,15 +167,18 @@ export function ProfileDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="personal" className="flex-1 overflow-hidden">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="personal">Personal</TabsTrigger>
-            <TabsTrigger value="professional">Professional</TabsTrigger>
-            <TabsTrigger value="preferences">Preferences</TabsTrigger>
-            <TabsTrigger value="security">Security</TabsTrigger>
-          </TabsList>
+        <div className="flex-1 overflow-hidden">
+          <Tabs defaultValue="personal" className="h-full flex flex-col">
+          <div className="px-6 pb-4 flex-shrink-0">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="personal">Personal</TabsTrigger>
+              <TabsTrigger value="professional">Professional</TabsTrigger>
+              <TabsTrigger value="preferences">Preferences</TabsTrigger>
+              <TabsTrigger value="security">Security</TabsTrigger>
+            </TabsList>
+          </div>
 
-          <ScrollArea className="h-[500px] mt-4">
+          <ScrollArea className="flex-1 px-6 pb-6">
             <TabsContent value="personal" className="space-y-6">
               <Card>
                 <CardHeader>
@@ -191,7 +200,7 @@ export function ProfileDialog() {
                     <div className="relative">
                       <Avatar className="h-20 w-20">
                         <AvatarImage src={profile.avatar} alt="Profile picture" />
-                        <AvatarFallback className="bg-gradient-to-br from-primary via-blue-600 to-orange-600 text-white text-lg">
+                        <AvatarFallback className="bg-gradient-to-br from-primary via-secondary to-accent text-white text-lg">
                           {profile.firstName[0]}{profile.lastName[0]}
                         </AvatarFallback>
                       </Avatar>
@@ -406,67 +415,69 @@ export function ProfileDialog() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Email Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Receive notifications via email</p>
-                    </div>
-                    <Switch 
-                      checked={profile.notifications.email}
-                      onCheckedChange={(checked) => setProfile(prev => ({
-                        ...prev,
-                        notifications: { ...prev.notifications, email: checked }
-                      }))}
-                    />
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Push Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Receive push notifications on mobile</p>
-                    </div>
-                    <Switch 
-                      checked={profile.notifications.push}
-                      onCheckedChange={(checked) => setProfile(prev => ({
-                        ...prev,
-                        notifications: { ...prev.notifications, push: checked }
-                      }))}
-                    />
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Desktop Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Show desktop notifications</p>
-                    </div>
-                    <Switch 
-                      checked={profile.notifications.desktop}
-                      onCheckedChange={(checked) => setProfile(prev => ({
-                        ...prev,
-                        notifications: { ...prev.notifications, desktop: checked }
-                      }))}
-                    />
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Mention Notifications</Label>
-                      <p className="text-sm text-muted-foreground">Get notified when mentioned</p>
-                    </div>
-                    <Switch 
-                      checked={profile.notifications.mentions}
-                      onCheckedChange={(checked) => setProfile(prev => ({
-                        ...prev,
-                        notifications: { ...prev.notifications, mentions: checked }
-                      }))}
-                    />
-                  </div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Email Notifications</CardTitle>
+                      <CardDescription>Receive notifications via email</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Switch 
+                        checked={profile.notifications.email}
+                        onCheckedChange={(checked) => setProfile(prev => ({
+                          ...prev,
+                          notifications: { ...prev.notifications, email: checked }
+                        }))}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Push Notifications</CardTitle>
+                      <CardDescription>Receive push notifications on mobile</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Switch 
+                        checked={profile.notifications.push}
+                        onCheckedChange={(checked) => setProfile(prev => ({
+                          ...prev,
+                          notifications: { ...prev.notifications, push: checked }
+                        }))}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Desktop Notifications</CardTitle>
+                      <CardDescription>Show desktop notifications</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Switch 
+                        checked={profile.notifications.desktop}
+                        onCheckedChange={(checked) => setProfile(prev => ({
+                          ...prev,
+                          notifications: { ...prev.notifications, desktop: checked }
+                        }))}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Mention Notifications</CardTitle>
+                      <CardDescription>Get notified when mentioned</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Switch 
+                        checked={profile.notifications.mentions}
+                        onCheckedChange={(checked) => setProfile(prev => ({
+                          ...prev,
+                          notifications: { ...prev.notifications, mentions: checked }
+                        }))}
+                      />
+                    </CardContent>
+                  </Card>
                 </CardContent>
               </Card>
 
@@ -478,51 +489,53 @@ export function ProfileDialog() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Show Email Address</Label>
-                      <p className="text-sm text-muted-foreground">Make your email visible to other users</p>
-                    </div>
-                    <Switch 
-                      checked={profile.privacy.showEmail}
-                      onCheckedChange={(checked) => setProfile(prev => ({
-                        ...prev,
-                        privacy: { ...prev.privacy, showEmail: checked }
-                      }))}
-                    />
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Show Phone Number</Label>
-                      <p className="text-sm text-muted-foreground">Make your phone number visible to other users</p>
-                    </div>
-                    <Switch 
-                      checked={profile.privacy.showPhone}
-                      onCheckedChange={(checked) => setProfile(prev => ({
-                        ...prev,
-                        privacy: { ...prev.privacy, showPhone: checked }
-                      }))}
-                    />
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Show Online Status</Label>
-                      <p className="text-sm text-muted-foreground">Let others see when you're online</p>
-                    </div>
-                    <Switch 
-                      checked={profile.privacy.showStatus}
-                      onCheckedChange={(checked) => setProfile(prev => ({
-                        ...prev,
-                        privacy: { ...prev.privacy, showStatus: checked }
-                      }))}
-                    />
-                  </div>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Show Email Address</CardTitle>
+                      <CardDescription>Make your email visible to other users</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Switch 
+                        checked={profile.privacy.showEmail}
+                        onCheckedChange={(checked) => setProfile(prev => ({
+                          ...prev,
+                          privacy: { ...prev.privacy, showEmail: checked }
+                        }))}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Show Phone Number</CardTitle>
+                      <CardDescription>Make your phone number visible to other users</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Switch 
+                        checked={profile.privacy.showPhone}
+                        onCheckedChange={(checked) => setProfile(prev => ({
+                          ...prev,
+                          privacy: { ...prev.privacy, showPhone: checked }
+                        }))}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base">Show Online Status</CardTitle>
+                      <CardDescription>Let others see when you're online</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Switch 
+                        checked={profile.privacy.showStatus}
+                        onCheckedChange={(checked) => setProfile(prev => ({
+                          ...prev,
+                          privacy: { ...prev.privacy, showStatus: checked }
+                        }))}
+                      />
+                    </CardContent>
+                  </Card>
                 </CardContent>
               </Card>
             </TabsContent>
@@ -536,31 +549,30 @@ export function ProfileDialog() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <Label className="font-medium">Two-Factor Authentication</Label>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        Add an extra layer of security to your account
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-base flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-success-foreground" />
+                        Two-Factor Authentication
+                      </CardTitle>
+                      <CardDescription>Add an extra layer of security to your account</CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-between">
                       <BadgeComponent variant={profile.twoFactorEnabled ? "default" : "secondary"}>
                         {profile.twoFactorEnabled ? "Enabled" : "Disabled"}
                       </BadgeComponent>
                       <Button variant="outline" size="sm">
                         {profile.twoFactorEnabled ? "Manage" : "Enable"}
                       </Button>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
 
-                  <Separator />
-
-                  <div className="space-y-4">
-                    <Label className="text-base font-medium">Change Password</Label>
-                    <div className="space-y-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Change Password</CardTitle>
+                      <CardDescription>Update your account password</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="currentPassword">Current Password</Label>
                         <Input id="currentPassword" type="password" />
@@ -573,17 +585,20 @@ export function ProfileDialog() {
                         <Label htmlFor="confirmPassword">Confirm New Password</Label>
                         <Input id="confirmPassword" type="password" />
                       </div>
+                    </CardContent>
+                    <CardFooter>
                       <Button className="w-full">
                         Update Password
                       </Button>
-                    </div>
-                  </div>
+                    </CardFooter>
+                  </Card>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader>
                   <CardTitle>Account Actions</CardTitle>
+                  <CardDescription>Additional account management options</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <Button variant="outline" className="w-full justify-start">
@@ -598,7 +613,8 @@ export function ProfileDialog() {
               </Card>
             </TabsContent>
           </ScrollArea>
-        </Tabs>
+          </Tabs>
+        </div>
       </DialogContent>
     </Dialog>
   )

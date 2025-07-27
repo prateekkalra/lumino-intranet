@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
-import { EnhancedScrollArea } from '../ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../ui/card';
+import { ScrollArea } from '../ui/scroll-area';
 import { Heart, Trophy, Star, Zap, Plus } from 'lucide-react';
 import { useDialog } from '../../contexts/DialogContext';
 import { useToast } from '../ui/use-toast';
@@ -70,26 +71,26 @@ const mockRecognitions = [
 const getTypeIcon = (type: string) => {
   switch (type) {
     case 'achievement':
-      return <Trophy className="h-4 w-4 text-yellow-500" />;
+      return <Trophy className="h-4 w-4 text-primary" />;
     case 'kudos':
-      return <Heart className="h-4 w-4 text-red-500" />;
+      return <Heart className="h-4 w-4 text-primary" />;
     case 'milestone':
-      return <Star className="h-4 w-4 text-purple-500" />;
+      return <Star className="h-4 w-4 text-primary" />;
     default:
-      return <Zap className="h-4 w-4 text-blue-500" />;
+      return <Zap className="h-4 w-4 text-primary" />;
   }
 };
 
-const getTypeColor = (type: string) => {
+const getTypeVariant = (type: string) => {
   switch (type) {
     case 'achievement':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'default';
     case 'kudos':
-      return 'bg-red-100 text-red-800';
+      return 'secondary';
     case 'milestone':
-      return 'bg-purple-100 text-purple-800';
+      return 'outline';
     default:
-      return 'bg-blue-100 text-blue-800';
+      return 'secondary';
   }
 };
 
@@ -154,120 +155,136 @@ export const RecognitionWidget = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-gray-900 dark:text-white">Recognition Wall</h3>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleGiveRecognition}
-          className="h-6 px-2 text-xs"
-        >
-          <Plus className="h-3 w-3 mr-1" />
-          Give Recognition
-        </Button>
-      </div>
+    <Card className="h-full flex flex-col">
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <span>Recognition Wall</span>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleGiveRecognition}
+            className="h-8 px-3 text-xs"
+          >
+            <Plus className="h-3 w-3 mr-1" />
+            Give Recognition
+          </Button>
+        </CardTitle>
+      </CardHeader>
 
-      <EnhancedScrollArea className="flex-1 pr-2">
-        <div className="space-y-4">
-          {recognitions.map((recognition) => (
-            <div
-              key={recognition.id}
-              className="bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800 cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => handleRecognitionClick(recognition)}
-            >
-              {/* Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  {getTypeIcon(recognition.type)}
-                  <Badge className={getTypeColor(recognition.type)} variant="secondary">
-                    {recognition.type}
-                  </Badge>
-                </div>
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {getTimeAgo(recognition.createdAt)}
-                </span>
-              </div>
+      <CardContent className="flex-1">
+        <ScrollArea className="h-full">
+          <div className="space-y-4">
+            {recognitions.map((recognition) => (
+              <Card
+                key={recognition.id}
+                className="cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => handleRecognitionClick(recognition)}
+              >
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      {getTypeIcon(recognition.type)}
+                      <Badge variant={getTypeVariant(recognition.type) as any}>
+                        {recognition.type}
+                      </Badge>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      {getTimeAgo(recognition.createdAt)}
+                    </span>
+                  </div>
+                </CardHeader>
 
-              {/* Recipient */}
-              <div className="flex items-center gap-3 mb-3">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={recognition.recipient.avatar} alt={recognition.recipient.name} />
-                  <AvatarFallback>
-                    {recognition.recipient.name.split(' ').map(n => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                    {recognition.recipient.name}
-                  </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    {recognition.recipient.role}
-                  </p>
-                </div>
-              </div>
+                <CardContent className="pt-0 pb-3">
+                  <div className="flex items-center gap-3 mb-3">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={recognition.recipient.avatar} alt={recognition.recipient.name} />
+                      <AvatarFallback>
+                        {recognition.recipient.name.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <p className="font-semibold text-foreground text-sm">
+                        {recognition.recipient.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {recognition.recipient.role}
+                      </p>
+                    </div>
+                  </div>
 
-              {/* Message */}
-              <p className="text-sm text-gray-700 dark:text-gray-300 mb-3 italic">
-                &ldquo;{recognition.message}&rdquo;
-              </p>
+                  <Card>
+                    <CardContent className="p-3">
+                      <p className="text-sm text-foreground italic">
+                        &ldquo;{recognition.message}&rdquo;
+                      </p>
+                    </CardContent>
+                  </Card>
+                </CardContent>
 
-              {/* Footer with sender and reactions */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src={recognition.sender.avatar} alt={recognition.sender.name} />
-                    <AvatarFallback className="text-xs">
-                      {recognition.sender.name.split(' ').map(n => n[0]).join('')}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-xs text-gray-600 dark:text-gray-400">
-                    from {recognition.sender.name}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {recognition.reactions.map((reaction, index) => (
-                    <button
-                      key={index}
-                      className="flex items-center gap-1 text-xs hover:bg-white/50 rounded px-1 py-0.5 transition-colors"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleReactionClick(recognition.id, reaction.emoji);
-                      }}
-                    >
-                      <span>{reaction.emoji}</span>
-                      <span className="text-gray-600 dark:text-gray-400">
-                        {reaction.count}
+                <CardFooter className="pt-0">
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-6 w-6">
+                        <AvatarImage src={recognition.sender.avatar} alt={recognition.sender.name} />
+                        <AvatarFallback className="text-xs">
+                          {recognition.sender.name.split(' ').map(n => n[0]).join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-xs text-muted-foreground">
+                        from {recognition.sender.name}
                       </span>
-                    </button>
-                  ))}
-                  <button
-                    className="flex items-center gap-1 text-xs hover:bg-white/50 rounded px-1 py-0.5 transition-colors text-gray-500"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const emojis = ['👍', '❤️', '👏', '🎉', '🚀'];
-                      const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-                      handleReactionClick(recognition.id, randomEmoji);
-                    }}
-                  >
-                    <Plus className="h-3 w-3" />
-                    <span>React</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </EnhancedScrollArea>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {recognition.reactions.map((reaction, index) => (
+                        <Button
+                          key={index}
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 px-2 text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleReactionClick(recognition.id, reaction.emoji);
+                          }}
+                        >
+                          <span>{reaction.emoji}</span>
+                          <span className="ml-1 text-muted-foreground">
+                            {reaction.count}
+                          </span>
+                        </Button>
+                      ))}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-6 px-2 text-xs"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const emojis = ['👍', '❤️', '👏', '🎉', '🚀'];
+                          const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                          handleReactionClick(recognition.id, randomEmoji);
+                        }}
+                      >
+                        <Plus className="h-3 w-3 mr-1" />
+                        React
+                      </Button>
+                    </div>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
+      </CardContent>
 
-      {/* Footer */}
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
-          <span>{recognitions.length} recognitions</span>
-          <span>This week</span>
-        </div>
-      </div>
-    </div>
+      <CardFooter>
+        <Card className="w-full">
+          <CardContent className="p-3">
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>{recognitions.length} recognitions</span>
+              <span>This week</span>
+            </div>
+          </CardContent>
+        </Card>
+      </CardFooter>
+    </Card>
   );
 };

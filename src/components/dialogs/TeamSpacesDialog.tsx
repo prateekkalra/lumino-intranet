@@ -283,27 +283,27 @@ export function TeamSpacesDialog() {
 
   const getStatusColor = (status: TeamMember['status']) => {
     switch (status) {
-      case 'online': return 'bg-green-500'
-      case 'away': return 'bg-yellow-500'
-      case 'busy': return 'bg-red-500'
-      case 'offline': return 'bg-gray-400'
-      default: return 'bg-gray-400'
+      case 'online': return 'bg-success'
+      case 'away': return 'bg-warning'
+      case 'busy': return 'bg-destructive'
+      case 'offline': return 'bg-muted-foreground'
+      default: return 'bg-muted-foreground'
     }
   }
 
   const getPriorityColor = (priority: 'high' | 'medium' | 'low') => {
     switch (priority) {
-      case 'high': return 'border-red-200 bg-red-50 text-red-700'
-      case 'medium': return 'border-yellow-200 bg-yellow-50 text-yellow-700'
-      case 'low': return 'border-green-200 bg-green-50 text-green-700'
-      default: return 'border-gray-200 bg-gray-50 text-gray-700'
+      case 'high': return 'border-destructive bg-destructive/5 text-destructive'
+      case 'medium': return 'border-warning bg-warning/10 text-warning-foreground'
+      case 'low': return 'border-success bg-success/10 text-success-foreground'
+      default: return 'border-border bg-muted text-muted-foreground'
     }
   }
 
   if (selectedTeam) {
     return (
       <Dialog open={isOpen} onOpenChange={() => closeDialog('team-spaces')}>
-        <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
+        <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
           <DialogHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -331,7 +331,7 @@ export function TeamSpacesDialog() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-green-600" />
+                  <TrendingUp className="h-4 w-4 text-success-foreground" />
                   <span className="text-sm font-medium">Projects</span>
                 </div>
                 <p className="text-2xl font-bold mt-1">{selectedTeam.projects}</p>
@@ -340,7 +340,7 @@ export function TeamSpacesDialog() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4 text-blue-600" />
+                  <Users className="h-4 w-4 text-info-foreground" />
                   <span className="text-sm font-medium">Team Members</span>
                 </div>
                 <p className="text-2xl font-bold mt-1">{selectedTeam.members.length}</p>
@@ -349,7 +349,7 @@ export function TeamSpacesDialog() {
             <Card>
               <CardContent className="p-4">
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-purple-600" />
+                  <Clock className="h-4 w-4 text-secondary-foreground" />
                   <span className="text-sm font-medium">Task Progress</span>
                 </div>
                 <div className="mt-2">
@@ -535,7 +535,7 @@ export function TeamSpacesDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => closeDialog('team-spaces')}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Building className="h-5 w-5" />

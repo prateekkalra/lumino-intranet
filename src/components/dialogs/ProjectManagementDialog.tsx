@@ -116,29 +116,29 @@ export function ProjectManagementDialog() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      case "planning": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-      case "completed": return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
-      case "on-hold": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-      case "todo": return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
-      case "in-progress": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-      case "done": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+      case "active": return "bg-success/10 text-success-foreground border border-success/20"
+      case "planning": return "bg-info/10 text-info-foreground border border-info/20"
+      case "completed": return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
+      case "on-hold": return "bg-warning/10 text-warning-foreground border border-warning/20"
+      case "todo": return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
+      case "in-progress": return "bg-info/10 text-info-foreground border border-info/20"
+      case "done": return "bg-success/10 text-success-foreground border border-success/20"
+      default: return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
     }
   }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-      case "medium": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300"
-      case "low": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+      case "high": return "bg-destructive/10 text-destructive-foreground border border-destructive/20"
+      case "medium": return "bg-warning/10 text-warning-foreground border border-warning/20"
+      case "low": return "bg-success/10 text-success-foreground border border-success/20"
+      default: return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
     }
   }
 
   return (
     <Dialog open={isDialogOpen('project-management')} onOpenChange={() => closeDialog('project-management')}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <FolderKanban className="w-5 h-5" />
@@ -209,7 +209,7 @@ export function ProjectManagementDialog() {
                     { action: "David reviewed", task: "Database schema", time: "2 days ago" }
                   ].map((activity, index) => (
                     <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                      <div className="w-2 h-2 bg-info rounded-full" />
                       <div className="flex-1 text-sm">
                         <span className="font-medium">{activity.action}</span> {activity.task}
                       </div>
@@ -353,9 +353,9 @@ export function ProjectManagementDialog() {
               {["todo", "in-progress", "done"].map((status) => (
                 <div key={status}>
                   <h4 className="font-medium mb-2 capitalize flex items-center gap-2">
-                    {status === "todo" && <AlertCircle className="w-4 h-4 text-orange-500" />}
-                    {status === "in-progress" && <Clock className="w-4 h-4 text-blue-500" />}
-                    {status === "done" && <CheckCircle className="w-4 h-4 text-green-500" />}
+                    {status === "todo" && <AlertCircle className="w-4 h-4 text-warning" />}
+                    {status === "in-progress" && <Clock className="w-4 h-4 text-info" />}
+                    {status === "done" && <CheckCircle className="w-4 h-4 text-success" />}
                     {status.replace('-', ' ')} ({mockTasks.filter(t => t.status === status).length})
                   </h4>
                   <div className="space-y-2">
@@ -424,7 +424,7 @@ export function ProjectManagementDialog() {
                     <div className="flex items-start justify-between">
                       <div>
                         <CardTitle className="text-base flex items-center gap-2">
-                          {project.priority === "high" && <Star className="w-4 h-4 text-yellow-500" />}
+                          {project.priority === "high" && <Star className="w-4 h-4 text-warning" />}
                           {project.name}
                         </CardTitle>
                         <CardDescription className="mt-1">{project.description}</CardDescription>

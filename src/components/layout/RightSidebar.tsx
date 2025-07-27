@@ -335,36 +335,36 @@ export function RightSidebar() {
   const getEventColor = (color?: string) => {
     switch (color) {
       case 'blue':
-        return 'bg-blue-100 text-blue-700 border-blue-200'
+        return 'bg-secondary/10 text-secondary-foreground border-secondary'
       case 'red':
-        return 'bg-red-100 text-red-700 border-red-200'
+        return 'bg-destructive/10 text-destructive-foreground border-destructive'
       case 'green':
-        return 'bg-green-100 text-green-700 border-green-200'
+        return 'bg-success/10 text-success-foreground border-success'
       case 'purple':
-        return 'bg-purple-100 text-purple-700 border-purple-200'
+        return 'bg-accent/10 text-accent-foreground border-accent'
       case 'orange':
-        return 'bg-orange-100 text-orange-700 border-orange-200'
+        return 'bg-warning/10 text-warning-foreground border-warning'
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-200'
+        return 'bg-muted/10 text-muted-foreground border-muted'
     }
   }
 
   const getLinkColor = (color?: string) => {
     switch (color) {
       case 'blue':
-        return 'bg-blue-50 border-blue-200 hover:bg-blue-100'
+        return 'bg-secondary/5 border-secondary hover:bg-secondary/10'
       case 'red':
-        return 'bg-red-50 border-red-200 hover:bg-red-100'
+        return 'bg-destructive/5 border-destructive/50 hover:bg-destructive/10'
       case 'green':
-        return 'bg-green-50 border-green-200 hover:bg-green-100'
+        return 'bg-success/5 border-success/50 hover:bg-success/10'
       case 'purple':
-        return 'bg-purple-50 border-purple-200 hover:bg-purple-100'
+        return 'bg-accent/5 border-accent/50 hover:bg-accent/10'
       case 'orange':
-        return 'bg-orange-50 border-orange-200 hover:bg-orange-100'
+        return 'bg-warning/5 border-warning/50 hover:bg-warning/10'
       case 'teal':
-        return 'bg-teal-50 border-teal-200 hover:bg-teal-100'
+        return 'bg-info/5 border-info/50 hover:bg-info/10'
       default:
-        return 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+        return 'bg-muted/5 border-muted/50 hover:bg-muted/10'
     }
   }
 
@@ -429,16 +429,16 @@ export function RightSidebar() {
                       >
                         <div className="flex items-start gap-3">
                           <div className={`p-2 rounded-lg ${
-                            notification.type === 'security' ? 'bg-red-100 dark:bg-red-900/30' :
-                            notification.type === 'maintenance' ? 'bg-orange-100 dark:bg-orange-900/30' :
-                            notification.type === 'system' ? 'bg-blue-100 dark:bg-blue-900/30' :
-                            'bg-green-100 dark:bg-green-900/30'
+                            notification.type === 'security' ? 'bg-destructive/10 dark:bg-destructive/30' :
+                            notification.type === 'maintenance' ? 'bg-warning/10 dark:bg-warning/30' :
+                            notification.type === 'system' ? 'bg-info/10 dark:bg-info/30' :
+                            'bg-success/10 dark:bg-success/30'
                           }`}>
                             <Icon className={`h-3.5 w-3.5 ${
-                              notification.type === 'security' ? 'text-red-600 dark:text-red-400' :
-                              notification.type === 'maintenance' ? 'text-orange-600 dark:text-orange-400' :
-                              notification.type === 'system' ? 'text-blue-600 dark:text-blue-400' :
-                              'text-green-600 dark:text-green-400'
+                              notification.type === 'security' ? 'text-destructive' :
+                              notification.type === 'maintenance' ? 'text-warning-foreground' :
+                              notification.type === 'system' ? 'text-info-foreground' :
+                              'text-success-foreground'
                             }`} />
                           </div>
                           <div className="flex-1 min-w-0 space-y-1">
@@ -611,12 +611,12 @@ export function RightSidebar() {
                         <div className="relative">
                           <Avatar className="h-9 w-9 ring-2 ring-background group-hover:ring-primary/20 transition-all">
                             <AvatarImage src={update.user.avatar} alt={update.user.name} />
-                            <AvatarFallback className="text-sm bg-gradient-to-br from-primary/20 to-blue-500/20 text-primary font-semibold">
+                            <AvatarFallback className="text-sm bg-gradient-to-br from-primary/20 to-secondary/20 text-primary font-semibold">
                               {update.user.name.split(' ').map(n => n[0]).join('')}
                             </AvatarFallback>
                           </Avatar>
                           {update.isImportant && (
-                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center">
+                            <div className="absolute -top-1 -right-1 w-4 h-4 bg-warning rounded-full flex items-center justify-center">
                               <Star className="h-2.5 w-2.5 text-white fill-current" />
                             </div>
                           )}
@@ -670,7 +670,7 @@ export function RightSidebar() {
           <div className="p-3 border-t border-border/50 bg-muted/10 backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse"></div>
                 <span className="text-xs text-muted-foreground">Live updates</span>
               </div>
               <Button variant="ghost" size="sm" className="h-7 text-xs hover:bg-muted/50">

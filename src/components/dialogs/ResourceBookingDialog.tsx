@@ -235,12 +235,12 @@ export function ResourceBookingDialog() {
           </div>
           <div className="flex items-center gap-2">
             {resource.isAvailable ? (
-              <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50">
+              <Badge variant="outline" className="text-success-foreground border-success bg-success/10">
                 <Check className="h-3 w-3 mr-1" />
                 Available
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-red-600 border-red-200 bg-red-50">
+              <Badge variant="outline" className="text-destructive border-destructive bg-destructive/10">
                 <X className="h-3 w-3 mr-1" />
                 Busy
               </Badge>
@@ -265,7 +265,7 @@ export function ResourceBookingDialog() {
         )}
 
         {!resource.isAvailable && resource.nextAvailable && (
-          <div className="flex items-center gap-2 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-md">
+          <div className="flex items-center gap-2 text-xs text-warning-foreground bg-warning/10 px-2 py-1 rounded-md">
             <Clock className="h-3 w-3" />
             <span>Next available: {resource.nextAvailable}</span>
           </div>
@@ -276,7 +276,7 @@ export function ResourceBookingDialog() {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => closeDialog('resource-booking')}>
-      <DialogContent className="max-w-6xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />

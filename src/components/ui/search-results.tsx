@@ -49,21 +49,21 @@ const getTypeIcon = (type: SearchResultType) => {
 const getTypeColor = (type: SearchResultType) => {
   switch (type) {
     case 'task':
-      return 'text-blue-600 bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400';
+      return 'text-info-foreground bg-info dark:bg-info/20 dark:text-info-foreground';
     case 'news':
-      return 'text-green-600 bg-green-100 dark:bg-green-900/20 dark:text-green-400';
+      return 'text-success-foreground bg-success/10';
     case 'event':
-      return 'text-purple-600 bg-purple-100 dark:bg-purple-900/20 dark:text-purple-400';
+      return 'text-secondary-foreground bg-secondary/20';
     case 'person':
-      return 'text-orange-600 bg-orange-100 dark:bg-orange-900/20 dark:text-orange-400';
+      return 'text-warning-foreground bg-warning/10';
     case 'action':
-      return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20 dark:text-yellow-400';
+      return 'text-warning-foreground bg-warning/20';
     case 'recognition':
-      return 'text-pink-600 bg-pink-100 dark:bg-pink-900/20 dark:text-pink-400';
+      return 'text-accent-foreground bg-accent/20';
     case 'analytics':
-      return 'text-indigo-600 bg-indigo-100 dark:bg-indigo-900/20 dark:text-indigo-400';
+      return 'text-info-foreground bg-info/20';
     default:
-      return 'text-gray-600 bg-gray-100 dark:bg-gray-900/20 dark:text-gray-400';
+      return 'text-muted-foreground bg-muted/50';
   }
 };
 
@@ -77,7 +77,7 @@ const highlightText = (text: string, query: string) => {
     <>
       {parts.map((part, index) => (
         regex.test(part) ? (
-          <mark key={index} className="bg-yellow-200 dark:bg-yellow-900/50 text-foreground rounded px-0.5">
+          <mark key={index} className="bg-warning/30 text-foreground rounded px-0.5">
             {part}
           </mark>
         ) : (

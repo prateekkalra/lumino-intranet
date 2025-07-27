@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../ui/card';
 import { useToast } from '../ui/use-toast';
 import { useDialog } from '../../contexts/DialogContext';
 import { TrendingUp, TrendingDown, Minus, BarChart3, Download, Calendar, Maximize2 } from 'lucide-react';
@@ -72,11 +73,11 @@ export const AnalyticsWidget = () => {
   const getTrendIcon = (trend: 'up' | 'down' | 'stable') => {
     switch (trend) {
       case 'up':
-        return <TrendingUp className="h-3 w-3 text-green-500" />;
+        return <TrendingUp className="h-3 w-3 text-primary" />;
       case 'down':
-        return <TrendingDown className="h-3 w-3 text-red-500" />;
+        return <TrendingDown className="h-3 w-3 text-destructive" />;
       case 'stable':
-        return <Minus className="h-3 w-3 text-gray-500" />;
+        return <Minus className="h-3 w-3 text-muted-foreground" />;
     }
   };
 
@@ -121,147 +122,160 @@ export const AnalyticsWidget = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header with Controls */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-1">
-          <BarChart3 className="h-4 w-4 text-gray-500" />
+    <Card className="h-full flex flex-col">
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            <span>Analytics</span>
+          </div>
           <div className="flex gap-1">
-            {(Object.keys(chartConfig) as ChartType[]).map((type) => (
-              <Button
-                key={type}
-                size="sm"
-                variant={activeChart === type ? 'default' : 'outline'}
-                onClick={() => setActiveChart(type)}
-                className="h-6 px-2 text-xs capitalize"
-              >
-                {type}
-              </Button>
-            ))}
-          </div>
-        </div>
-        
-        {/* Action Buttons */}
-        <div className="flex gap-1">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={handleDateRange}
-            className="h-6 w-6 p-0"
-            title="Date range"
-          >
-            <Calendar className="h-3 w-3" />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={handleExport}
-            className="h-6 w-6 p-0"
-            title="Export data"
-          >
-            <Download className="h-3 w-3" />
-          </Button>
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={handleFullView}
-            className="h-6 w-6 p-0"
-            title="Full view"
-          >
-            <Maximize2 className="h-3 w-3" />
-          </Button>
-        </div>
-      </div>
-
-      {/* Current Value Display */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {config.value}
-            </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {config.title}
-            </p>
-          </div>
-          <div className="flex items-center gap-1">
-            {getTrendIcon(config.trend)}
-            <span className={`text-sm font-medium ${
-              config.trend === 'up' 
-                ? 'text-green-600' 
-                : config.trend === 'down' 
-                ? 'text-red-600' 
-                : 'text-gray-600'
-            }`}>
-              {config.change}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Chart */}
-      <div className="flex-1 min-h-0 w-full">
-        <div className="h-full w-full min-h-[120px] cursor-pointer">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart 
-              data={data}
-              margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
-              onClick={handleChartClick}
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={handleDateRange}
+              className="h-8 w-8 p-0"
+              title="Date range"
             >
-              <XAxis 
-                dataKey="month" 
-                axisLine={false}
-                tickLine={false}
-                fontSize={12}
-                stroke="#6B7280"
-                interval="preserveStartEnd"
-              />
-              <YAxis 
-                axisLine={false}
-                tickLine={false}
-                fontSize={12}
-                stroke="#6B7280"
-                width={40}
-              />
-              <Tooltip 
-                contentStyle={{
-                  backgroundColor: 'white',
-                  border: '1px solid #E5E7EB',
-                  borderRadius: '8px',
-                  fontSize: '12px',
-                  cursor: 'pointer',
-                }}
-                formatter={(value) => [`${config.unit}${value}`, config.title]}
-              />
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke={config.color}
-                strokeWidth={2}
-                dot={{ 
-                  fill: config.color, 
-                  strokeWidth: 2, 
-                  r: 4,
-                  className: "hover:r-6 cursor-pointer transition-all duration-200"
-                }}
-                activeDot={{ 
-                  r: 8, 
-                  stroke: config.color, 
-                  strokeWidth: 2,
-                  className: "cursor-pointer animate-pulse"
-                }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
+              <Calendar className="h-3 w-3" />
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={handleExport}
+              className="h-8 w-8 p-0"
+              title="Export data"
+            >
+              <Download className="h-3 w-3" />
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={handleFullView}
+              className="h-8 w-8 p-0"
+              title="Full view"
+            >
+              <Maximize2 className="h-3 w-3" />
+            </Button>
+          </div>
+        </CardTitle>
 
-      {/* Footer */}
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-        <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
-          Last 6 months • Updated hourly
-        </p>
-      </div>
-    </div>
+        <Card>
+          <CardContent className="p-3">
+            <div className="flex gap-1">
+              {(Object.keys(chartConfig) as ChartType[]).map((type) => (
+                <Button
+                  key={type}
+                  size="sm"
+                  variant={activeChart === type ? 'default' : 'outline'}
+                  onClick={() => setActiveChart(type)}
+                  className="h-6 px-2 text-xs capitalize"
+                >
+                  {type}
+                </Button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </CardHeader>
+
+      <CardContent className="flex-1">
+        <Card className="mb-4">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-2xl font-bold">
+                  {config.value}
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  {config.title}
+                </p>
+              </div>
+              <Card>
+                <CardContent className="p-2">
+                  <div className="flex items-center gap-2">
+                    {getTrendIcon(config.trend)}
+                    <span className={`text-sm font-medium ${
+                      config.trend === 'up' 
+                        ? 'text-primary' 
+                        : config.trend === 'down' 
+                        ? 'text-destructive' 
+                        : 'text-muted-foreground'
+                    }`}>
+                      {config.change}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="flex-1">
+          <CardContent className="p-4 h-full">
+            <div className="h-full w-full min-h-[120px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart 
+                  data={data}
+                  margin={{ top: 5, right: 5, left: 5, bottom: 5 }}
+                  onClick={handleChartClick}
+                >
+                  <XAxis 
+                    dataKey="month" 
+                    axisLine={false}
+                    tickLine={false}
+                    fontSize={12}
+                    className="text-muted-foreground"
+                    interval="preserveStartEnd"
+                  />
+                  <YAxis 
+                    axisLine={false}
+                    tickLine={false}
+                    fontSize={12}
+                    className="text-muted-foreground"
+                    width={40}
+                  />
+                  <Tooltip 
+                    contentStyle={{
+                      backgroundColor: 'hsl(var(--card))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px',
+                      fontSize: '12px',
+                    }}
+                    formatter={(value) => [`${config.unit}${value}`, config.title]}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke={config.color}
+                    strokeWidth={2}
+                    dot={{ 
+                      fill: config.color, 
+                      strokeWidth: 2, 
+                      r: 4,
+                    }}
+                    activeDot={{ 
+                      r: 8, 
+                      stroke: config.color, 
+                      strokeWidth: 2,
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      </CardContent>
+
+      <CardFooter>
+        <Card className="w-full">
+          <CardContent className="p-3">
+            <p className="text-xs text-muted-foreground text-center">
+              Last 6 months • Updated hourly
+            </p>
+          </CardContent>
+        </Card>
+      </CardFooter>
+    </Card>
   );
 };

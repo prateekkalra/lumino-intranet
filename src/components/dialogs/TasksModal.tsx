@@ -34,13 +34,13 @@ interface TasksModalProps {
 const getStatusIcon = (status: TaskStatus) => {
   switch (status) {
     case 'todo':
-      return <Circle className="h-4 w-4 text-gray-400" />;
+      return <Circle className="h-4 w-4 text-muted-foreground" />;
     case 'in-progress':
-      return <Clock className="h-4 w-4 text-blue-500" />;
+      return <Clock className="h-4 w-4 text-info-foreground" />;
     case 'done':
-      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+      return <CheckCircle2 className="h-4 w-4 text-success-foreground" />;
     default:
-      return <Circle className="h-4 w-4 text-gray-400" />;
+      return <Circle className="h-4 w-4 text-muted-foreground" />;
   }
 };
 
@@ -219,8 +219,8 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
           <Card 
             className={`cursor-grab active:cursor-grabbing select-none ${
               snapshot.isDragging 
-                ? 'border-blue-300 bg-blue-50/50 dark:bg-blue-900/30' 
-                : 'hover:border-gray-300 dark:hover:border-gray-600 transition-colors duration-150'
+                ? 'border-info bg-info/10' 
+                : 'hover:border-border transition-colors duration-150'
             }`}
             style={{
               pointerEvents: snapshot.isDragging ? 'none' : 'auto'
@@ -231,7 +231,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                 <div className="flex items-start gap-2 flex-1 min-w-0">
                   <div
                     {...provided.dragHandleProps}
-                    className="mt-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0 flex items-center justify-center w-6 h-6 -ml-1"
+                    className="mt-1 text-muted-foreground hover:text-foreground transition-colors shrink-0 flex items-center justify-center w-6 h-6 -ml-1"
                     style={{
                       cursor: snapshot.isDragging ? 'grabbing' : 'grab',
                       touchAction: 'none'
@@ -272,9 +272,9 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                       </div>
                     ) : (
                       <CardTitle 
-                        className={`text-sm cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors ${
+                        className={`text-sm cursor-pointer hover:text-info-foreground dark:hover:text-info-foreground transition-colors ${
                           task.status === 'done' 
-                            ? 'line-through text-gray-500 dark:text-gray-400' 
+                            ? 'line-through text-muted-foreground' 
                             : ''
                         }`}
                         onClick={() => startEditingTask(task)}
@@ -306,7 +306,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                 pointerEvents: snapshot.isDragging ? 'none' : 'auto'
               }}
             >
-              <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Calendar className="h-3 w-3" />
                   <span>Due: {task.dueDate}</span>
@@ -317,7 +317,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                     size="sm"
                     variant="ghost"
                     onClick={() => startEditingTask(task)}
-                    className="h-5 w-5 p-0 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    className="h-5 w-5 p-0 hover:bg-accent transition-colors"
                     disabled={snapshot.isDragging}
                   >
                     <Edit className="h-3 w-3" />
@@ -326,7 +326,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                     size="sm"
                     variant="ghost"
                     onClick={() => deleteTask(task.id)}
-                    className="h-5 w-5 p-0 hover:bg-red-100 dark:hover:bg-red-900/20 hover:text-red-600 transition-colors"
+                    className="h-5 w-5 p-0 hover:bg-destructive/10 hover:text-destructive transition-colors"
                     disabled={snapshot.isDragging}
                   >
                     <Trash2 className="h-3 w-3" />
@@ -360,7 +360,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                   size="sm"
                   variant="ghost"
                   onClick={() => addNewTask(status)}
-                  className="h-7 w-7 p-0 hover:bg-white/50 dark:hover:bg-gray-700/50 transition-colors"
+                  className="h-7 w-7 p-0 hover:bg-accent/50 transition-colors"
                 >
                   <Plus className="h-4 w-4" />
                 </Button>
@@ -373,7 +373,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className={`h-full transition-all duration-200 rounded-lg overflow-auto scroll-smooth scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 dark:hover:scrollbar-thumb-gray-500 ${
+                  className={`h-full transition-all duration-200 rounded-lg overflow-auto scroll-smooth scrollbar-thin scrollbar-thumb-muted-foreground/30 scrollbar-track-transparent hover:scrollbar-thumb-muted-foreground/50 ${
                     snapshot.isDraggingOver 
                       ? `${config.accent} border-2 border-dashed border-current/20 shadow-inner` 
                       : ''
@@ -391,7 +391,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
                         <div className={`p-4 rounded-full ${config.headerColor} mb-3`}>
                           {getStatusIcon(status)}
                         </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                        <p className="text-sm text-muted-foreground mb-3">
                           No tasks in {config.title.toLowerCase()}
                         </p>
                         <Button
@@ -422,7 +422,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-[95vw] w-full max-h-[90vh] p-0 flex flex-col overflow-hidden tasks-modal-fix">
+      <DialogContent className="max-w-[90vw] w-full max-h-[95vh] h-[95vh] p-0 flex flex-col overflow-hidden tasks-modal-fix">
         <DialogHeader className="px-6 py-4 border-b shrink-0">
           <DialogTitle className="text-xl font-bold">My Tasks - Kanban Board</DialogTitle>
         </DialogHeader>
@@ -430,7 +430,7 @@ export const TasksModal = ({ isOpen, onClose, initialTasks, onTasksChange }: Tas
         <div className="flex-1 p-6 flex flex-col h-full">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <span>{tasks.filter(t => t.status === 'done').length} completed</span>
                 <span>•</span>
                 <span>{tasks.filter(t => t.status !== 'done').length} remaining</span>

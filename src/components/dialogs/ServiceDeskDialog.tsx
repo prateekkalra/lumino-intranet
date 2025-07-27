@@ -100,21 +100,21 @@ export function ServiceDeskDialog() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "open": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-      case "in-progress": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-      case "resolved": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      case "operational": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      case "degraded": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+      case "open": return "bg-info/10 text-info-foreground border border-info/20"
+      case "in-progress": return "bg-warning/10 text-warning-foreground border border-warning/20"
+      case "resolved": return "bg-success/10 text-success-foreground border border-success/20"
+      case "operational": return "bg-success/10 text-success-foreground border border-success/20"
+      case "degraded": return "bg-warning/10 text-warning-foreground border border-warning/20"
+      default: return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
     }
   }
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-      case "medium": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300"
-      case "low": return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+      case "high": return "bg-destructive/10 text-destructive-foreground border border-destructive/20"
+      case "medium": return "bg-warning/10 text-warning-foreground border border-warning/20"
+      case "low": return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
+      default: return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
     }
   }
 
@@ -130,7 +130,7 @@ export function ServiceDeskDialog() {
 
   return (
     <Dialog open={isDialogOpen('service-desk')} onOpenChange={() => closeDialog('service-desk')}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Ticket className="w-5 h-5" />
@@ -327,7 +327,7 @@ export function ServiceDeskDialog() {
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold">System Status</h3>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-green-500" />
+                <CheckCircle className="w-4 h-4 text-success" />
                 <span className="text-sm text-muted-foreground">All systems operational</span>
               </div>
             </div>
@@ -339,11 +339,11 @@ export function ServiceDeskDialog() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         {system.status === 'operational' ? (
-                          <CheckCircle className="w-5 h-5 text-green-500" />
+                          <CheckCircle className="w-5 h-5 text-success" />
                         ) : system.status === 'degraded' ? (
-                          <AlertCircle className="w-5 h-5 text-yellow-500" />
+                          <AlertCircle className="w-5 h-5 text-warning" />
                         ) : (
-                          <XCircle className="w-5 h-5 text-red-500" />
+                          <XCircle className="w-5 h-5 text-destructive" />
                         )}
                         <div>
                           <h4 className="font-medium">{system.service}</h4>

@@ -305,18 +305,18 @@ export function TeamFeedDialog() {
   const getPostTypeColor = (type: TeamPost['type']) => {
     switch (type) {
       case 'achievement':
-        return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+        return 'bg-warning/10 text-warning-foreground border border-warning/20'
       case 'announcement':
-        return 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
+        return 'bg-info/10 text-info-foreground border border-info/20'
       case 'celebration':
-        return 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+        return 'bg-success/10 text-success-foreground border border-success/20'
       case 'question':
-        return 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+        return 'bg-accent/10 text-accent-foreground border border-accent/20'
       case 'document':
-        return 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'
+        return 'bg-secondary/10 text-secondary-foreground border border-secondary/20'
       case 'status':
       default:
-        return 'bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400'
+        return 'bg-muted/10 text-muted-foreground border border-muted/20'
     }
   }
 
@@ -355,12 +355,12 @@ export function TeamFeedDialog() {
         <div className="relative">
           <Avatar className="h-12 w-12">
             <AvatarImage src={post.user.avatar} alt={post.user.name} />
-            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-blue-500/20">
+            <AvatarFallback className="bg-gradient-to-br from-primary/20 to-secondary/20">
               {post.user.name.split(' ').map(n => n[0]).join('')}
             </AvatarFallback>
           </Avatar>
           {post.isImportant && (
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full flex items-center justify-center">
+            <div className="absolute -top-1 -right-1 w-4 h-4 bg-warning rounded-full flex items-center justify-center">
               <Star className="h-2.5 w-2.5 text-white fill-current" />
             </div>
           )}
@@ -395,9 +395,9 @@ export function TeamFeedDialog() {
             <div className="mb-4 space-y-2">
               {post.attachments.map((attachment, index) => (
                 <div key={index} className="flex items-center gap-3 p-3 border rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer">
-                  {attachment.type === 'document' && <FileText className="h-5 w-5 text-blue-600" />}
-                  {attachment.type === 'image' && <ImageIcon className="h-5 w-5 text-green-600" />}
-                  {attachment.type === 'link' && <Share2 className="h-5 w-5 text-purple-600" />}
+                  {attachment.type === 'document' && <FileText className="h-5 w-5 text-info" />}
+                  {attachment.type === 'image' && <ImageIcon className="h-5 w-5 text-success" />}
+                  {attachment.type === 'link' && <Share2 className="h-5 w-5 text-accent" />}
                   <span className="font-medium text-sm">{attachment.name}</span>
                 </div>
               ))}
@@ -472,7 +472,7 @@ export function TeamFeedDialog() {
       open={isDialogOpen('team-feed')} 
       onOpenChange={(open) => !open && closeDialog('team-feed')}
     >
-      <DialogContent className="max-w-6xl max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader className="p-6 pb-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

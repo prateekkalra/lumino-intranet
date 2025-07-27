@@ -276,26 +276,26 @@ export function NotificationsDialog() {
 
   const getPriorityColor = (priority?: string) => {
     switch (priority) {
-      case 'high': return 'border-l-red-500'
-      case 'medium': return 'border-l-yellow-500'
-      case 'low': return 'border-l-green-500'
-      default: return 'border-l-gray-300'
+      case 'high': return 'border-l-destructive'
+      case 'medium': return 'border-l-warning'
+      case 'low': return 'border-l-success'
+      default: return 'border-l-border'
     }
   }
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case 'message': return 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-400'
-      case 'calendar': return 'bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-400'
-      case 'system': return 'bg-orange-100 text-orange-600 dark:bg-orange-900 dark:text-orange-400'
-      case 'achievement': return 'bg-purple-100 text-purple-600 dark:bg-purple-900 dark:text-purple-400'
-      default: return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400'
+      case 'message': return 'bg-info text-info-foreground'
+      case 'calendar': return 'bg-success/10 text-success-foreground'
+      case 'system': return 'bg-warning/10 text-warning-foreground'
+      case 'achievement': return 'bg-secondary/50 text-secondary-foreground'
+      default: return 'bg-muted/50 text-muted-foreground'
     }
   }
 
   return (
     <Dialog open={isOpen} onOpenChange={() => closeDialog('notifications')}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />

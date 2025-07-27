@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Button } from '../ui/button';
-import { EnhancedScrollArea } from '../ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../ui/card';
+import { ScrollArea } from '../ui/scroll-area';
 import { useDialog } from '../../contexts/DialogContext';
 import { useToast } from '../ui/use-toast';
 import { useSearchProvider } from '../../hooks/useSearchProvider';
@@ -20,62 +21,52 @@ import {
   Car,
   StickyNote,
 } from 'lucide-react';
-// import type { QuickAction } from '../../types/dashboard';
 
 const quickActions = [
   {
     id: 'quick-note',
     label: 'Quick Note',
     icon: 'StickyNote',
-    color: 'bg-amber-500 hover:bg-amber-600 text-white',
   },
   {
     id: 'book-room',
     label: 'Book Room',
     icon: 'Calendar',
-    color: 'bg-blue-500 hover:bg-blue-600 text-white',
   },
   {
     id: 'submit-expense',
     label: 'Submit Expense',
     icon: 'DollarSign',
-    color: 'bg-green-500 hover:bg-green-600 text-white',
   },
   {
     id: 'start-call',
     label: 'Start Call',
     icon: 'Phone',
-    color: 'bg-purple-500 hover:bg-purple-600 text-white',
   },
   {
     id: 'create-report',
     label: 'Create Report',
     icon: 'FileText',
-    color: 'bg-orange-500 hover:bg-orange-600 text-white',
   },
   {
     id: 'find-colleague',
     label: 'Find Colleague',
     icon: 'Users',
-    color: 'bg-indigo-500 hover:bg-indigo-600 text-white',
   },
   {
     id: 'send-message',
     label: 'Send Message',
     icon: 'MessageSquare',
-    color: 'bg-pink-500 hover:bg-pink-600 text-white',
   },
   {
     id: 'log-time',
     label: 'Log Time',
     icon: 'Clock',
-    color: 'bg-teal-500 hover:bg-teal-600 text-white',
   },
   {
     id: 'it-support',
     label: 'IT Support',
     icon: 'Settings',
-    color: 'bg-gray-500 hover:bg-gray-600 text-white',
   },
 ];
 
@@ -142,12 +133,10 @@ export const QuickActionsWidget: React.FC = () => {
         });
         break;
       case 'start-call':
-        // Simulate starting a call
         toast({
           title: "Starting call...",
           description: "Connecting you to the video call system",
         });
-        // TODO: Implement actual call functionality
         break;
       case 'create-report':
         openDialog('project-management');
@@ -210,52 +199,53 @@ export const QuickActionsWidget: React.FC = () => {
         action: () => handleAction(action.id)
       }));
     }
-  }), [handleAction]);
+  }), []);
 
   // Register with search service
   useSearchProvider('QuickActionsWidget', searchProvider);
 
-  // Update the actions with proper onClick handlers
-  const actionsWithHandlers = quickActions.map(action => ({
-    ...action,
-    onClick: () => handleAction(action.id)
-  }));
-
   return (
-    <div className="h-full flex flex-col">
-      {/* Header */}
-      <div className="mb-4">
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Quick access to common tasks
-        </p>
-      </div>
+    <Card className="h-full flex flex-col">
+      <CardHeader>
+        <CardTitle>Quick Actions</CardTitle>
+      </CardHeader>
 
-      {/* Actions Grid with ScrollArea */}
-      <EnhancedScrollArea className="flex-1 pr-2">
-        <div className="grid grid-cols-3 gap-2">
-          {actionsWithHandlers.map((action) => (
-            <Button
-              key={action.id}
-              onClick={action.onClick}
-              className={`${action.color} h-12 px-1 flex flex-col items-center justify-center gap-1 hover:brightness-110 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md rounded-md active:scale-95`}
-              variant="default"
-            >
-              {getIcon(action.icon)}
-              <span className="text-xs font-medium text-center leading-tight">
-                {action.label}
-              </span>
-            </Button>
-          ))}
-        </div>
-      </EnhancedScrollArea>
+      <CardContent className="flex-1">
+        <ScrollArea className="h-full">
+          <div className="grid grid-cols-3 gap-2">
+            {quickActions.map((action) => (
+              <Card
+                key={action.id}
+                className="cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-105 active:scale-95"
+              >
+                <CardContent className="p-3 flex flex-col items-center justify-center gap-2">
+                  <Button
+                    size="icon"
+                    onClick={() => handleAction(action.id)}
+                    className="h-8 w-8"
+                  >
+                    {getIcon(action.icon)}
+                  </Button>
+                  <span className="text-xs font-medium text-center leading-tight">
+                    {action.label}
+                  </span>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
+      </CardContent>
 
-      {/* Footer Stats */}
-      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
-          <span>Most used: Quick Note</span>
-          <span>9 actions available</span>
-        </div>
-      </div>
-    </div>
+      <CardFooter>
+        <Card className="w-full">
+          <CardContent className="p-3">
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>Most used: Quick Note</span>
+              <span>{quickActions.length} actions available</span>
+            </div>
+          </CardContent>
+        </Card>
+      </CardFooter>
+    </Card>
   );
 };

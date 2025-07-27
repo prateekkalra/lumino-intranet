@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { EnhancedScrollArea } from '../ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '../ui/card';
+import { ScrollArea } from '../ui/scroll-area';
 import { useToast } from '../ui/use-toast';
 import { useDialog } from '../../contexts/DialogContext';
 import {
@@ -80,10 +81,10 @@ const mockNewsData: NewsPost[] = [
 ];
 
 const categoryColors = {
-  announcement: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300',
-  update: 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300',
-  event: 'bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-300',
-  achievement: 'bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300',
+  announcement: 'bg-secondary text-secondary-foreground',
+  update: 'bg-secondary text-secondary-foreground',
+  event: 'bg-secondary text-secondary-foreground',
+  achievement: 'bg-secondary text-secondary-foreground',
 };
 
 const getTimeAgo = (date: Date): string => {
@@ -215,11 +216,24 @@ export const NewsWidget: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Header with Filter and Create Post */}
-      <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-gray-500" />
+    <Card className="h-full flex flex-col">
+      <CardHeader>
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4 text-muted-foreground" />
+            <span>Company News</span>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleCreatePost}
+            className="h-8 px-3 text-xs"
+          >
+            <Plus className="h-3 w-3 mr-1" />
+            Post
+          </Button>
+        </CardTitle>
+        <CardContent className="p-0 pt-2">
           <div className="flex gap-1 flex-wrap">
             <Button
               size="sm"
@@ -241,134 +255,125 @@ export const NewsWidget: React.FC = () => {
               </Button>
             ))}
           </div>
-        </div>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={handleCreatePost}
-          className="h-6 px-2 text-xs"
-        >
-          <Plus className="h-3 w-3 mr-1" />
-          Post
-        </Button>
-      </div>
+        </CardContent>
+      </CardHeader>
 
-      {/* News Feed */}
-      <EnhancedScrollArea className="flex-1 pr-2">
-        <div className="space-y-4">
-          {filteredNews.map((post) => (
-            <div
-              key={post.id}
-              className="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 border border-gray-200 dark:border-gray-700 hover:shadow-md transition-all duration-200"
-            >
-              {/* Post Header */}
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => handleAuthorClick(post.author.name)}
-                    className="hover:opacity-80 transition-opacity"
-                  >
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage src={post.author.avatar} alt={post.author.name} />
-                      <AvatarFallback>
-                        <User className="h-4 w-4" />
-                      </AvatarFallback>
-                    </Avatar>
-                  </button>
-                  <div className="flex-1 min-w-0">
-                    <button
-                      onClick={() => handleAuthorClick(post.author.name)}
-                      className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-left"
-                    >
-                      {post.author.name}
-                    </button>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                      {post.author.role} • {getTimeAgo(post.publishedAt)}
-                    </p>
+      <CardContent className="flex-1">
+        <ScrollArea className="h-full">
+          <div className="space-y-4">
+            {filteredNews.map((post) => (
+              <Card key={post.id} className="hover:shadow-md transition-all duration-200">
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => handleAuthorClick(post.author.name)}
+                        className="hover:opacity-80 transition-opacity"
+                      >
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={post.author.avatar} alt={post.author.name} />
+                          <AvatarFallback>
+                            <User className="h-4 w-4" />
+                          </AvatarFallback>
+                        </Avatar>
+                      </button>
+                      <div className="flex-1 min-w-0">
+                        <button
+                          onClick={() => handleAuthorClick(post.author.name)}
+                          className="text-sm font-medium text-foreground hover:text-primary transition-colors text-left"
+                        >
+                          {post.author.name}
+                        </button>
+                        <p className="text-xs text-muted-foreground">
+                          {post.author.role} • {getTimeAgo(post.publishedAt)}
+                        </p>
+                      </div>
+                    </div>
+                    <Badge className={categoryColors[post.category]} variant="secondary">
+                      {post.category}
+                    </Badge>
                   </div>
-                </div>
-                <Badge className={categoryColors[post.category]} variant="secondary">
-                  {post.category}
-                </Badge>
-              </div>
+                </CardHeader>
 
-              {/* Post Content */}
-              <div className="mb-3">
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-2 text-sm">
-                  {post.title}
-                </h4>
-                <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3">
-                  {post.content}
-                </p>
-              </div>
+                <CardContent className="pt-0">
+                  <CardTitle className="text-sm mb-2">{post.title}</CardTitle>
+                  <p className="text-sm text-muted-foreground line-clamp-3 mb-3">
+                    {post.content}
+                  </p>
 
-              {/* Post Image */}
-              {post.image && (
-                <div className="mb-3">
-                  <img
-                    src={post.image}
-                    alt=""
-                    className="w-full h-32 object-cover rounded-lg"
-                  />
-                </div>
-              )}
+                  {/* Post Image */}
+                  {post.image && (
+                    <Card className="mb-3">
+                      <CardContent className="p-0">
+                        <img
+                          src={post.image}
+                          alt=""
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                      </CardContent>
+                    </Card>
+                  )}
+                </CardContent>
 
-              {/* Post Actions */}
-              <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-4">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleLike(post.id)}
-                    className={`h-7 px-2 gap-1 transition-all duration-200 hover:scale-105 ${
-                      likedPosts.has(post.id)
-                        ? 'text-red-500 hover:text-red-600'
-                        : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
-                    }`}
-                  >
-                    <Heart
-                      className={`h-3 w-3 transition-all duration-200 ${
-                        likedPosts.has(post.id) ? 'fill-current scale-110' : ''
+                <CardFooter className="pt-0">
+                  <div className="flex items-center gap-4 w-full">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleLike(post.id)}
+                      className={`h-7 px-2 gap-1 transition-all duration-200 hover:scale-105 ${
+                        likedPosts.has(post.id)
+                          ? 'text-destructive hover:text-destructive/80'
+                          : 'text-muted-foreground hover:text-foreground'
                       }`}
-                    />
-                    <span className="text-xs">
-                      {post.likes + (likedPosts.has(post.id) ? 1 : 0)}
-                    </span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleComment(post.id)}
-                    className="h-7 px-2 gap-1 text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all duration-200 hover:scale-105"
-                  >
-                    <MessageCircle className="h-3 w-3" />
-                    <span className="text-xs">
-                      {(commentCounts[post.id] || post.comments.length)}
-                    </span>
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => handleShare(post.id)}
-                    className="h-7 px-2 gap-1 text-gray-500 hover:text-green-600 dark:hover:text-green-400 transition-all duration-200 hover:scale-105"
-                  >
-                    <Share2 className="h-3 w-3" />
-                    <span className="text-xs">Share</span>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </EnhancedScrollArea>
+                    >
+                      <Heart
+                        className={`h-3 w-3 transition-all duration-200 ${
+                          likedPosts.has(post.id) ? 'fill-current scale-110' : ''
+                        }`}
+                      />
+                      <span className="text-xs">
+                        {post.likes + (likedPosts.has(post.id) ? 1 : 0)}
+                      </span>
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleComment(post.id)}
+                      className="h-7 px-2 gap-1 text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-105"
+                    >
+                      <MessageCircle className="h-3 w-3" />
+                      <span className="text-xs">
+                        {(commentCounts[post.id] || post.comments.length)}
+                      </span>
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleShare(post.id)}
+                      className="h-7 px-2 gap-1 text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-105"
+                    >
+                      <Share2 className="h-3 w-3" />
+                      <span className="text-xs">Share</span>
+                    </Button>
+                  </div>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
+      </CardContent>
 
-      {/* Footer */}
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
-          <span>{filteredNews.length} posts</span>
-          <span>Updated 2 min ago</span>
-        </div>
-      </div>
-    </div>
+      <CardFooter>
+        <Card className="w-full">
+          <CardContent className="p-3">
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>{filteredNews.length} posts</span>
+              <span>Updated 2 min ago</span>
+            </div>
+          </CardContent>
+        </Card>
+      </CardFooter>
+    </Card>
   );
 };

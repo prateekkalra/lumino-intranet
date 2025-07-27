@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Sun, Cloud, CloudRain, Snowflake } from 'lucide-react';
-import { EnhancedScrollArea } from '../ui/scroll-area';
+import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { useUserStore } from '../../store/userStore';
 import { useDialog } from '../../contexts/DialogContext';
 import { useToast } from '../ui/use-toast';
@@ -18,18 +19,18 @@ const getWeatherIcon = (condition: string) => {
   switch (condition.toLowerCase()) {
     case 'sunny':
     case 'clear':
-      return <Sun className="h-6 w-6 text-yellow-500" />;
+      return <Sun className="h-6 w-6 text-primary" />;
     case 'cloudy':
     case 'partly cloudy':
-      return <Cloud className="h-6 w-6 text-gray-500" />;
+      return <Cloud className="h-6 w-6 text-muted-foreground" />;
     case 'rainy':
     case 'rain':
-      return <CloudRain className="h-6 w-6 text-blue-500" />;
+      return <CloudRain className="h-6 w-6 text-primary" />;
     case 'snowy':
     case 'snow':
-      return <Snowflake className="h-6 w-6 text-blue-300" />;
+      return <Snowflake className="h-6 w-6 text-muted-foreground" />;
     default:
-      return <Sun className="h-6 w-6 text-yellow-500" />;
+      return <Sun className="h-6 w-6 text-primary" />;
   }
 };
 
@@ -125,122 +126,136 @@ export const WelcomeWidget: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <EnhancedScrollArea className="flex-1 pr-2">
-        {/* Main Greeting Section */}
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-            {getGreeting()}, {currentUser?.name?.split(' ')[0] || 'User'}!
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            Ready to make today productive?
-          </p>
-        </div>
+    <Card className="h-full flex flex-col">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">
+          {getGreeting()}, {currentUser?.name?.split(' ')[0] || 'User'}!
+        </CardTitle>
+        <p className="text-muted-foreground text-sm">
+          Ready to make today productive?
+        </p>
+      </CardHeader>
+
+      <CardContent className="flex-1">
+        <ScrollArea className="h-full">
 
         {/* Date and Time Row */}
-        <div className="flex items-center justify-between mb-6 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <Calendar className="h-5 w-5 text-purple-600" />
-            <span className="font-medium text-sm">{formatDate(currentTime)}</span>
-          </div>
-          <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-            <Clock className="h-5 w-5 text-blue-600" />
-            <span className="font-mono text-lg font-bold">
-              {formatTime(currentTime)}
-            </span>
-          </div>
-        </div>
+        <Card className="mb-6">
+          <CardContent className="flex items-center justify-between p-3">
+            <div className="flex items-center gap-2 text-foreground">
+              <Calendar className="h-5 w-5 text-primary" />
+              <span className="font-medium text-sm">{formatDate(currentTime)}</span>
+            </div>
+            <div className="flex items-center gap-2 text-foreground">
+              <Clock className="h-5 w-5 text-primary" />
+              <span className="font-mono text-lg font-bold">
+                {formatTime(currentTime)}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Weather and Schedule Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {/* Weather Card */}
-          <div 
-            className="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800 cursor-pointer hover:shadow-md transition-shadow"
+          <Card 
+            className="cursor-pointer hover:shadow-md transition-shadow"
             onClick={handleWeatherClick}
           >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                {getWeatherIcon(mockWeatherData.condition)}
-                <span className="font-semibold text-gray-900 dark:text-white">
-                  {mockWeatherData.temperature}°F
-                </span>
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  {getWeatherIcon(mockWeatherData.condition)}
+                  <span className="font-semibold text-foreground">
+                    {mockWeatherData.temperature}°F
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <MapPin className="h-3 w-3" />
+                  <span>{mockWeatherData.location}</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
-                <MapPin className="h-3 w-3" />
-                <span>{mockWeatherData.location}</span>
-              </div>
-            </div>
-            <p className="text-sm text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors">
-              {mockWeatherData.condition}
-            </p>
-          </div>
+              <p className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+                {mockWeatherData.condition}
+              </p>
+            </CardContent>
+          </Card>
 
           {/* Today's Schedule Card */}
-          <div className="bg-gradient-to-br from-orange-50 to-amber-100 dark:from-orange-900/20 dark:to-amber-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
-            <h4 className="font-semibold text-gray-900 dark:text-white mb-3 text-sm">
-              Today&rsquo;s Schedule
-            </h4>
-            <div className="space-y-2">
-              {mockScheduleEvents.slice(0, 3).map((event) => (
-                <div 
-                  key={event.id} 
-                  className="flex items-center gap-2 cursor-pointer hover:bg-white/50 rounded p-1 transition-colors"
-                  onClick={() => handleScheduleEventClick(event)}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm">Today's Schedule</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {mockScheduleEvents.slice(0, 3).map((event) => (
+                  <Card 
+                    key={event.id} 
+                    className="cursor-pointer hover:shadow-sm transition-shadow"
+                    onClick={() => handleScheduleEventClick(event)}
+                  >
+                    <CardContent className="p-2">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${
+                          event.type === 'meeting' 
+                            ? 'bg-primary' 
+                            : event.type === 'deadline' 
+                            ? 'bg-destructive' 
+                            : 'bg-muted-foreground'
+                        }`} />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-foreground truncate">
+                            {event.title}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {event.time}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <div className="flex items-center justify-between mt-3">
+                {mockScheduleEvents.length > 3 && (
+                  <p className="text-xs text-muted-foreground">
+                    +{mockScheduleEvents.length - 3} more events
+                  </p>
+                )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleViewFullSchedule}
+                  className="h-6 px-2 text-xs text-primary hover:text-primary/80"
                 >
-                  <div className={`w-2 h-2 rounded-full ${
-                    event.type === 'meeting' 
-                      ? 'bg-green-500' 
-                      : event.type === 'deadline' 
-                      ? 'bg-red-500' 
-                      : 'bg-blue-500'
-                  }`} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium text-gray-900 dark:text-white truncate">
-                      {event.title}
-                    </p>
-                    <p className="text-xs text-gray-600 dark:text-gray-400">
-                      {event.time}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="flex items-center justify-between mt-3">
-              {mockScheduleEvents.length > 3 && (
-                <p className="text-xs text-gray-500 dark:text-gray-500">
-                  +{mockScheduleEvents.length - 3} more events
-                </p>
-              )}
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={handleViewFullSchedule}
-                className="h-6 px-2 text-xs text-orange-600 hover:text-orange-700"
-              >
-                View All
-              </Button>
-            </div>
-          </div>
+                  View All
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Quick Stats Footer */}
-        <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-500">Tasks Due</p>
-              <p className="text-lg font-bold text-orange-600 dark:text-orange-400">3</p>
+        <Card>
+          <CardContent className="pt-4">
+            <div className="grid grid-cols-3 gap-4 text-center">
+              <div>
+                <p className="text-xs text-muted-foreground">Tasks Due</p>
+                <p className="text-lg font-bold text-primary">3</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Meetings</p>
+                <p className="text-lg font-bold text-primary">5</p>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">Messages</p>
+                <p className="text-lg font-bold text-primary">12</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-500">Meetings</p>
-              <p className="text-lg font-bold text-green-600 dark:text-green-400">5</p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-500 dark:text-gray-500">Messages</p>
-              <p className="text-lg font-bold text-blue-600 dark:text-blue-400">12</p>
-            </div>
-          </div>
-        </div>
-      </EnhancedScrollArea>
-    </div>
+          </CardContent>
+        </Card>
+        </ScrollArea>
+      </CardContent>
+    </Card>
   );
 };

@@ -174,13 +174,13 @@ export function TimeTrackingDialog() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      case "running": return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-      case "paused": return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300"
-      case "approved": return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
-      case "pending": return "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300"
-      case "rejected": return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
-      default: return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+      case "completed": return "bg-success/10 text-success-foreground border border-success/20"
+      case "running": return "bg-info/10 text-info-foreground border border-info/20"
+      case "paused": return "bg-warning/10 text-warning-foreground border border-warning/20"
+      case "approved": return "bg-success/10 text-success-foreground border border-success/20"
+      case "pending": return "bg-warning/10 text-warning-foreground border border-warning/20"
+      case "rejected": return "bg-destructive/10 text-destructive-foreground border border-destructive/20"
+      default: return "bg-secondary/10 text-secondary-foreground border border-secondary/20"
     }
   }
 
@@ -205,7 +205,7 @@ export function TimeTrackingDialog() {
 
   return (
     <Dialog open={isDialogOpen('time-tracking')} onOpenChange={() => closeDialog('time-tracking')}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Clock className="w-5 h-5" />
@@ -327,9 +327,9 @@ export function TimeTrackingDialog() {
                 </div>
 
                 {activeTimer && (
-                  <div className="bg-blue-50 dark:bg-blue-950/50 p-3 rounded-lg">
+                  <div className="bg-info/10 dark:bg-info/20 p-3 rounded-lg">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                      <div className="w-2 h-2 bg-info rounded-full animate-pulse" />
                       <span className="text-sm font-medium">Currently tracking:</span>
                     </div>
                     <div className="mt-1 text-sm text-muted-foreground">
@@ -358,7 +358,7 @@ export function TimeTrackingDialog() {
                         </Badge>
                         <div className="text-sm font-mono">{entry.duration}</div>
                         {entry.billable && (
-                          <div className="text-sm text-green-600 font-medium">
+                          <div className="text-sm text-success font-medium">
                             ${(parseFloat(entry.duration.split('h')[0]) * entry.rate).toFixed(0)}
                           </div>
                         )}
@@ -519,8 +519,8 @@ export function TimeTrackingDialog() {
                     </div>
                     <div className="pt-2 border-t">
                       <div className="flex items-center gap-2">
-                        <TrendingUp className="w-4 h-4 text-green-500" />
-                        <span className="text-sm text-green-600">+4% vs last week</span>
+                        <TrendingUp className="w-4 h-4 text-success" />
+                        <span className="text-sm text-success-foreground">+4% vs last week</span>
                       </div>
                     </div>
                   </div>
@@ -550,8 +550,8 @@ export function TimeTrackingDialog() {
                     </div>
                     <div className="pt-2 border-t">
                       <div className="flex items-center gap-2">
-                        <Target className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm text-blue-600">Meeting targets</span>
+                        <Target className="w-4 h-4 text-info" />
+                        <span className="text-sm text-info-foreground">Meeting targets</span>
                       </div>
                     </div>
                   </div>

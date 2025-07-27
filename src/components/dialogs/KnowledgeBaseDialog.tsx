@@ -135,7 +135,7 @@ export function KnowledgeBaseDialog() {
 
   return (
     <Dialog open={isDialogOpen('knowledge-base')} onOpenChange={() => closeDialog('knowledge-base')}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden">
+      <DialogContent className="max-w-[90vw] max-h-[95vh] w-full h-[95vh] p-0 flex flex-col">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <BookOpen className="w-5 h-5" />
@@ -171,7 +171,7 @@ export function KnowledgeBaseDialog() {
                       <div className="space-y-2 flex-1">
                         <div className="flex items-center gap-2">
                           <h4 className="font-medium">{article.title}</h4>
-                          {article.isFavorite && <Star className="w-4 h-4 text-yellow-500 fill-current" />}
+                          {article.isFavorite && <Star className="w-4 h-4 text-warning fill-current" />}
                         </div>
                         <p className="text-sm text-muted-foreground line-clamp-2">{article.description}</p>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -378,7 +378,7 @@ export function KnowledgeBaseDialog() {
                     <div className="flex items-start justify-between">
                       <div className="space-y-2 flex-1">
                         <div className="flex items-center gap-2">
-                          <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                          <Star className="w-4 h-4 text-warning fill-current" />
                           <h5 className="font-medium">{article.title}</h5>
                         </div>
                         <p className="text-sm text-muted-foreground line-clamp-2">{article.description}</p>

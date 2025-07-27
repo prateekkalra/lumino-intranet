@@ -34,13 +34,13 @@ export const INITIAL_TASKS: Task[] = [
 export const getPriorityColor = (priority: TaskPriority) => {
   switch (priority) {
     case 'high':
-      return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400 border-red-200 dark:border-red-800';
+      return 'bg-destructive/10 text-destructive-foreground border border-destructive/20';
     case 'medium':
-      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800';
+      return 'bg-warning/10 text-warning-foreground border border-warning/20';
     case 'low':
-      return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-800';
+      return 'bg-success/10 text-success-foreground border border-success/20';
     default:
-      return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600';
+      return 'bg-secondary/10 text-secondary-foreground border border-secondary/20';
   }
 };
 
@@ -49,26 +49,26 @@ export const getColumnConfig = (status: TaskStatus): TaskColumnConfig => {
     case 'todo':
       return {
         title: 'To Do',
-        color: 'border-gray-200 dark:border-gray-700',
-        headerColor: 'bg-gray-50 dark:bg-gray-800/50',
-        textColor: 'text-gray-700 dark:text-gray-300',
-        accent: 'bg-gray-100 dark:bg-gray-800'
+        color: 'border-border',
+        headerColor: 'bg-secondary/50',
+        textColor: 'text-secondary-foreground',
+        accent: 'bg-secondary'
       };
     case 'in-progress':
       return {
         title: 'In Progress',
-        color: 'border-blue-200 dark:border-blue-700',
-        headerColor: 'bg-blue-50 dark:bg-blue-900/20',
-        textColor: 'text-blue-700 dark:text-blue-300',
-        accent: 'bg-blue-100 dark:bg-blue-900/30'
+        color: 'border-info',
+        headerColor: 'bg-info/20',
+        textColor: 'text-info-foreground',
+        accent: 'bg-info/30'
       };
     case 'done':
       return {
         title: 'Done',
-        color: 'border-green-200 dark:border-green-700',
-        headerColor: 'bg-green-50 dark:bg-green-900/20',
-        textColor: 'text-green-700 dark:text-green-300',
-        accent: 'bg-green-100 dark:bg-green-900/30'
+        color: 'border-success',
+        headerColor: 'bg-success/20',
+        textColor: 'text-success-foreground',
+        accent: 'bg-success/30'
       };
   }
 };
