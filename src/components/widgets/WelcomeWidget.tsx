@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, Sun, Cloud, CloudRain, Snowflake } from 'lucide-react';
 import { ScrollArea } from '../ui/scroll-area';
 import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import { useUserStore } from '../../store/userStore';
 import { useDialog } from '../../contexts/DialogContext';
 import { useToast } from '../ui/use-toast';
 import type { WeatherData, ScheduleEvent } from '../../types/dashboard';
+import { Label } from '../ui/label';
+import { Switch } from '@radix-ui/react-switch';
 
 const getGreeting = (): string => {
   const hour = new Date().getHours();
@@ -124,6 +126,37 @@ export const WelcomeWidget: React.FC = () => {
       description: "View your complete schedule",
     });
   };
+  return (    <Card>
+    <CardHeader>
+      <CardTitle>Cookie Settings</CardTitle>
+      <CardDescription>Manage your cookie settings here.</CardDescription>
+    </CardHeader>
+    <CardContent className="grid gap-6">
+      <div className="flex items-center justify-between gap-4">
+        <Label htmlFor="necessary" className="flex flex-col items-start">
+          <span>Strictly Necessary</span>
+          <span className="text-muted-foreground leading-snug font-normal">
+            These cookies are essential in order to use the website and use its features.
+          </span>
+        </Label>
+        <Switch id="necessary" defaultChecked aria-label="Necessary" />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <Label htmlFor="functional" className="flex flex-col items-start">
+          <span>Functional Cookies</span>
+          <span className="text-muted-foreground leading-snug font-normal">
+            These cookies allow the website to provide personalized functionality.
+          </span>
+        </Label>
+        <Switch id="functional" aria-label="Functional" />
+      </div>
+    </CardContent>
+    <CardFooter>
+      <Button variant="outline" className="w-full">
+        Save preferences
+      </Button>
+    </CardFooter>
+  </Card>)
 
   return (
     <Card className="h-full flex flex-col">

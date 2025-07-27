@@ -222,7 +222,7 @@ export function Header() {
             
             {/* Desktop Search Results */}
             {isSearchOpen && (
-              <div className="absolute top-full left-0 right-0 mt-2 bg-popover border rounded-lg shadow-lg z-50">
+              <div className="absolute top-full left-0 right-0 mt-2 bg-popover border rounded-lg shadow-md z-50">
                 <SearchResults
                   results={searchResults}
                   query={searchValue}
@@ -467,7 +467,7 @@ export function Header() {
           
           {/* Mobile Search Results */}
           {(isSearchOpen || searchValue) && (
-            <div className="mt-2 bg-popover border rounded-lg shadow-lg">
+            <div className="mt-2 bg-popover border rounded-lg shadow-md">
               <SearchResults
                 results={searchResults}
                 query={searchValue}

@@ -100,7 +100,7 @@ export const TasksWidget = () => {
         <CardContent className="flex-1 space-y-4">
           <ScrollArea className="h-full">
             {/* Todo Column */}
-            <Card>
+            <Card className="mb-4">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Circle className="h-4 w-4 text-muted-foreground" />
@@ -130,7 +130,7 @@ export const TasksWidget = () => {
             </Card>
 
             {/* In Progress Column */}
-            <Card>
+            <Card className="mb-4">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Clock className="h-4 w-4 text-primary" />
