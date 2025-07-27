@@ -19,6 +19,7 @@ type DialogType =
   | 'profile'
   | 'help-support'
   | 'quick-note'
+  | 'notifications'
 
 interface DialogContextType {
   openDialogs: Set<DialogType>

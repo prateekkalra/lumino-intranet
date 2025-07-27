@@ -24,6 +24,7 @@ import { WellnessHubDialog } from "@/components/dialogs/WellnessHubDialog"
 import { ProfileDialog } from "@/components/dialogs/ProfileDialog"
 import { HelpSupportDialog } from "@/components/dialogs/HelpSupportDialog"
 import { QuickNoteDialog } from "@/components/dialogs/QuickNoteDialog"
+import { NotificationsDialog } from "@/components/dialogs/NotificationsDialog"
 
 function AppContent() {
   const { isOpen: isSidebarOpen } = useSidebar()
@@ -50,6 +51,7 @@ function AppContent() {
       <ProfileDialog />
       <HelpSupportDialog />
       <QuickNoteDialog />
+      <NotificationsDialog />
       
       {/* Main app content */}
       <main 

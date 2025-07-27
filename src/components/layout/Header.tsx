@@ -8,7 +8,6 @@ import {
   Settings, 
   HelpCircle, 
   LogOut, 
-  Home, 
   CheckCheck,
   Eye,
   Clock,
@@ -199,7 +198,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4 md:px-6">
         {/* Left side - Logo and Search */}
-        <div className="flex items-center gap-4 flex-1 md:flex-initial">
+        <div className="flex items-center gap-4 flex-1">
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary via-blue-600 to-orange-600">
@@ -211,7 +210,7 @@ export function Header() {
           </div>
 
           {/* Desktop Search */}
-          <div className="hidden md:flex relative flex-1">
+          <div className="hidden md:flex relative flex-1 max-w-lg">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
             <Input
               ref={searchInputRef}
@@ -350,7 +349,15 @@ export function Header() {
               </ScrollArea>
               {notifications.length > 0 && (
                 <div className="p-2 border-t">
-                  <Button variant="ghost" size="sm" className="w-full h-8 text-xs">
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-full h-8 text-xs"
+                    onClick={() => {
+                      openDialog('notifications')
+                      setIsNotificationsOpen(false)
+                    }}
+                  >
                     <Eye className="h-3 w-3 mr-1" />
                     View all notifications
                   </Button>
@@ -421,11 +428,6 @@ export function Header() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <Home className="mr-2 h-4 w-4" />
-                Dashboard
-                <span className="ml-auto text-xs text-muted-foreground">⌘D</span>
-              </DropdownMenuItem>
               <DropdownMenuItem 
                 className="cursor-pointer"
                 onClick={() => {
