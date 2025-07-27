@@ -2,10 +2,7 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from '../ui/card';
 
 // React and other hook imports
