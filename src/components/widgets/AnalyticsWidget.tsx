@@ -257,7 +257,7 @@ export const AnalyticsWidget = () => {
       </div>
 
       {/* Footer */}
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-3 py-3 border-t border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
           Last 6 months • Updated hourly
         </p>

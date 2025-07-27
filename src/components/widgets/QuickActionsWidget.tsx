@@ -223,12 +223,8 @@ export const QuickActionsWidget: React.FC = () => {
 
   return (
     // 1. The whole widget is wrapped in a Card for better structure
-    <Card className="h-full flex flex-col">
-      <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
-        <CardDescription>Quick access to common tasks</CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1">
+    <Card className="h-full flex flex-col border-none">
+      <CardContent className="flex-1 px-3">
         <EnhancedScrollArea className="h-full pr-3">
           {/* 2. This grid is now responsive and will adjust columns based on width */}
           <div className="grid grid-cols-[repeat(auto-fill,minmax(90px,1fr))] gap-2">
@@ -237,7 +233,7 @@ export const QuickActionsWidget: React.FC = () => {
               <Button
                 key={action.id}
                 onClick={() => handleAction(action.id)}
-                className={`${action.color} h-20 px-1 flex flex-col items-center justify-center gap-1.5 hover:brightness-110 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md rounded-md active:scale-95`}
+                className={`${action.color} h-20 px-1 flex flex-col items-center justify-center gap-1.5 hover:brightness-110 hover:scale-100 transition-all duration-200 shadow-sm hover:shadow-md rounded-xl active:scale-95`}
                 variant="default"
               >
                 {getIcon(action.icon)}

@@ -168,7 +168,7 @@ export const TeamWidget = () => {
       </EnhancedScrollArea>
       
       {/* Footer Stats */}
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-3 py-3 border-t border-gray-200 dark:border-gray-700">
         <p className="text-xs text-gray-500 dark:text-gray-500 text-center">
           {teamMembers.filter(m => getMemberStatus(m) === 'available').length} available • {teamMembers.length} total
         </p>

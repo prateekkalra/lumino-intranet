@@ -36,7 +36,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
   return (
     <div className="h-full">
       <Card
-        className={`h-full flex flex-col transition-all rounded-2xl duration-300 border bg-white dark:bg-gray-900 ${
+        className={`py-0 h-full flex flex-col transition-all rounded-2xl duration-300 border bg-white dark:bg-gray-900 ${
           isDragging
             ? 'shadow-xl border-blue-400 ring-4 ring-blue-400/20 backdrop-blur-md'
             : 'shadow-sm hover:shadow-md border-gray-200 dark:border-gray-700'
@@ -66,7 +66,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
                 />
               </div>
             )}
-            <h3 className="font-semibold text-sm text-foreground">{widget.title}</h3>
+            <h3 className="font-semibold text-sm text-foreground py-3">{widget.title}</h3>
           </div>
 
           {isEditMode && !isDragging && (
@@ -96,7 +96,7 @@ export const WidgetContainer: React.FC<WidgetContainerProps> = ({
         </div>
 
         {/* Body */}
-        <div className="relative flex-1 p-4 overflow-hidden">
+        <div className="relative flex-1 px-4 overflow-hidden">
           {widget.isVisible ? (
             <div className="h-full">{children}</div>
           ) : (

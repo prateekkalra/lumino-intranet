@@ -161,7 +161,7 @@ export const CalendarWidget = () => {
       </EnhancedScrollArea>
 
       {/* Footer */}
-      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-3 py-3 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-between text-xs text-gray-500 dark:text-gray-500">
           <span>{mockEvents.length} events</span>
           <span>This week</span>
